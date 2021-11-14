@@ -1,0 +1,107 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: sabnzbd-deployment
+   labels:
+     app: sabnzbd
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: sabnzbd
+   template:
+     metadata:
+       labels:
+         app: sabnzbd
+     spec:
+      containers:
+         - name: sabnzbd
+           image: linuxserver/sabnzbd
+           ports:
+             - containerPort: 6789
+           volumeMounts:
+             - mountPath: /config
+               name: nas-data
+             - mountPath: /downloads
+               name: sabnzbd-downloads
+             - mountPath: /incomplete-downloads
+               name: sabnzbd-incomplete
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+#           env:
+#           - name: SABNZBD_UID
+#             value: "0"
+#           - name: SABNZBD_GID
+#             value: "0"
+#      securityContext:
+#        fsGroup: 911
+#        runAsUser: 0
+#        runAsGroup: 0
+
+#      environment:
+#        - PUID=1000
+#        - PGID=1000
+#        - TZ=Europe/London
+      volumes:
+        - name: sabnzbd-config
+          hostPath:
+            path: /tmp/kubernetes/sabnzbd/config
+#        - name: sabnzbd-downloads
+#          hostPath:
+#            path: /tmp/kubernetes/sabnzbd/completed-downloads
+        - name: sabnzbd-incomplete
+          hostPath:
+            path: /data/sabnzbd/incomplete-downloads
+#        - name: sabnzbd-config
+#          flexVolume:
+#            driver: "fstab/cifs"
+#            fsType: "cifs"
+#            secretRef:
+#              name: "cifs-secret"
+#            options:
+#              networkPath: "\\\\nas.int.sambaum.ch\\temp\\kubernetes\\sabnzbd\\config"
+#              mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+        - name: sabnzbd-downloads
+          flexVolume:
+            driver: "fstab/cifs"
+            fsType: "cifs"
+            secretRef:
+              name: "cifs-secret"
+            options:
+              networkPath: "\\\\nas.int.sambaum.ch\\temp\\kubernetes\\sabnzbd\\completed-downloads"
+              mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+#        - name: sabnzbd-incomplete
+#          flexVolume:
+#            driver: "fstab/cifs"
+#            fsType: "cifs"
+#            secretRef:
+#              name: "cifs-secret"
+#            options:
+#              networkPath: "\\\\nas.int.sambaum.ch\\temp\\kubernetes\\sabnzbd\\incomplete-downloads"
+#              mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+#        - name: sabnzbd-downloads
+#          hostPath:
+#            path: /tmp/kubernetes/sabnzbd/completed-downloads
+#        - name: sabnzbd-incomplete
+#          hostPath:
+#            path: /tmp/kubernetes/sabnzbd/incomplete-downloads
+        - name: nas-data
+          persistentVolumeClaim:
+            claimName: nas-data
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sabnzbd-service
+spec:
+  selector:
+    app: sabnzbd
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort

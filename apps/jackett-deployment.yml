@@ -1,0 +1,60 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: jackett-deployment
+   labels:
+     app: jackett
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: jackett
+   template:
+     metadata:
+       labels:
+         app: jackett
+     spec:
+      containers:
+         - name: jackett
+           image: linuxserver/jackett
+           ports:
+             - containerPort: 9117
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: jackett
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: nas-kubernetes-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jackett-service
+spec:
+  selector:
+    app: jackett
+  ports:
+  - protocol: TCP
+    port: 9117
+    targetPort: 9117
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jackett-ingress
+spec:
+  rules:
+  - host: jackett.cube.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: jackett-service
+            port:
+              number: 9117

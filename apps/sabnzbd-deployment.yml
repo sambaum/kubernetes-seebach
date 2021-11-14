@@ -1,0 +1,76 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: sabnzbd-deployment
+   labels:
+     app: sabnzbd
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: sabnzbd
+   template:
+     metadata:
+       labels:
+         app: sabnzbd
+     spec:
+      containers:
+         - name: sabnzbd
+           image: linuxserver/sabnzbd
+           ports:
+             - containerPort: 6789
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: sabnzbd
+             - mountPath: /downloads
+               subPath: kubernetes/sabnzbd/completed-downloads
+               name: sabnzbd-downloads
+             - mountPath: /incomplete-downloads
+               name: sabnzbd-incomplete
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+      volumes:
+        - name: sabnzbd-incomplete
+          hostPath:
+            path: /data/sabnzbd/incomplete-downloads
+        - name: config
+          persistentVolumeClaim:
+            claimName: nas-kubernetes-pvc
+        - name: sabnzbd-downloads
+          persistentVolumeClaim:
+            claimName: nas-temp-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sabnzbd-service
+spec:
+  selector:
+    app: sabnzbd
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sabnzbd-ingress
+spec:
+  rules:
+  - host: sabnzbd.cube.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: sabnzbd-service
+            port:
+              number: 8080
