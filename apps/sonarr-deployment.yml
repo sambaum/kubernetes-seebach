@@ -17,7 +17,7 @@
      spec:
       containers:
          - name: sonarr
-           image: linuxserver/sonarr
+           image: linuxserver/sonarr:0.6.1342
            ports:
              - containerPort: 8989
            volumeMounts:

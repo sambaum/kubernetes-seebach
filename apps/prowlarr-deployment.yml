@@ -2,28 +2,28 @@
  apiVersion: apps/v1
  kind: Deployment
  metadata:
-   name: heimdall-deployment
+   name: prowlarr-deployment
    labels:
-     app: heimdall
+     app: prowlarr
  spec:
    replicas: 1
    selector:
       matchLabels:
-        app: heimdall
+        app: prowlarr
    template:
      metadata:
        labels:
-         app: heimdall
+         app: prowlarr
      spec:
       containers:
-         - name: heimdall
-           image: lscr.io/linuxserver/heimdall
+         - name: prowlarr
+           image: linuxserver/prowlarr:1.3.1077
            ports:
-             - containerPort: 80
+             - containerPort: 9696
            volumeMounts:
              - mountPath: /config
                name: config
-               subPath: heimdall
+               subPath: prowlarr
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -32,29 +32,29 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: heimdall-service
+  name: prowlarr-service
 spec:
   selector:
-    app: heimdall
+    app: prowlarr
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 80
+    port: 9696
+    targetPort: 9696
   type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: heimdall-ingress
+  name: prowlarr-ingress
 spec:
   rules:
-  - host: heimdall.cube.int.sambaum.ch
+  - host: prowlarr.cube.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: heimdall-service
+            name: prowlarr-service
             port:
-              number: 80
+              number: 9696

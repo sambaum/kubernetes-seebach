@@ -17,7 +17,7 @@
      spec:
       containers:
          - name: radarr
-           image: linuxserver/radarr
+           image: linuxserver/radarr:version-3.2.2.5080
            ports:
              - containerPort: 7878
            volumeMounts:
