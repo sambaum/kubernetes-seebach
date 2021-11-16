@@ -91,18 +91,14 @@ spec:
     path: "/volume1/Media"
 ---
 
-
-
----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: local-storage
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
-
-
 ---
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -140,8 +136,8 @@ spec:
           operator: In
           values:
           - docker
-
 ---
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -179,5 +175,3 @@ spec:
           operator: In
           values:
           - docker
-
-

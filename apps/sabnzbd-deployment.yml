@@ -26,7 +26,7 @@
                subPath: sabnzbd
              - mountPath: /downloads
                name: sabnzbd-downloads
-               subPath: kubernetes/sabnzbd/completed-downloads
+               subPath: Downloads
              - mountPath: /incomplete-downloads
                name: sabnzbd-incomplete
                subPath: sabnzbd/incomplete-downloads
@@ -39,15 +39,12 @@
         - name: sabnzbd-incomplete
           persistentVolumeClaim:
             claimName: local-data-pvc
-#        - name: sabnzbd-incomplete
-#          hostPath:
-#            path: /data/sabnzbd/incomplete-downloads
         - name: config
           persistentVolumeClaim:
             claimName: local-conf-pvc
         - name: sabnzbd-downloads
           persistentVolumeClaim:
-            claimName: nas-temp-pvc
+            claimName: nas-media-pvc
 ---
 kind: Service
 apiVersion: v1

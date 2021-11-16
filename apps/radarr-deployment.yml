@@ -24,9 +24,9 @@
              - mountPath: /config
                name: config
                subPath: radarr
-             - mountPath: /downloads
-               subPath: kubernetes/sabnzbd/completed-downloads
-               name: sabnzbd-downloads
+             # - mountPath: /downloads
+             #   subPath: kubernetes/sabnzbd/completed-downloads
+             #   name: sabnzbd-downloads
              - mountPath: /movies
                name: movies
                subPath: Video/Movies
@@ -38,10 +38,10 @@
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: nas-kubernetes-pvc
-        - name: sabnzbd-downloads
-          persistentVolumeClaim:
-            claimName: nas-temp-pvc
+            claimName: local-conf-pvc
+          # - name: sabnzbd-downloads
+          #   persistentVolumeClaim:
+          #     claimName: nas-temp-pvc
         - name: movies
           persistentVolumeClaim:
             claimName: nas-media-pvc

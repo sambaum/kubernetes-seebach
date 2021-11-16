@@ -27,7 +27,7 @@
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: nas-kubernetes-pvc
+            claimName: local-conf-pvc
 ---
 kind: Service
 apiVersion: v1
