@@ -25,10 +25,11 @@
                name: config
                subPath: sabnzbd
              - mountPath: /downloads
-               subPath: kubernetes/sabnzbd/completed-downloads
                name: sabnzbd-downloads
+               subPath: kubernetes/sabnzbd/completed-downloads
              - mountPath: /incomplete-downloads
                name: sabnzbd-incomplete
+               subPath: sabnzbd/incomplete-downloads
            env:
            - name: PUID
              value: "0"
@@ -36,11 +37,14 @@
              value: "0"
       volumes:
         - name: sabnzbd-incomplete
-          hostPath:
-            path: /data/sabnzbd/incomplete-downloads
+          persistentVolumeClaim:
+            claimName: local-data-pvc
+#        - name: sabnzbd-incomplete
+#          hostPath:
+#            path: /data/sabnzbd/incomplete-downloads
         - name: config
           persistentVolumeClaim:
-            claimName: nas-kubernetes-pvc
+            claimName: local-conf-pvc
         - name: sabnzbd-downloads
           persistentVolumeClaim:
             claimName: nas-temp-pvc

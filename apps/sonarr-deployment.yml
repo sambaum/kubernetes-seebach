@@ -30,7 +30,7 @@
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: nas-kubernetes-pvc
+            claimName: local-conf-pvc
         - name: tv
           persistentVolumeClaim:
             claimName: nas-media-pvc
