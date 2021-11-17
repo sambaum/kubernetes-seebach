@@ -2,7 +2,7 @@
  apiVersion: apps/v1
  kind: Deployment
  metadata:
-   name: sonarr-deployment
+   name: sonarr
    labels:
      app: sonarr
  spec:
