@@ -1,0 +1,65 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: requestrr-deployment
+   labels:
+     app: requestrr
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: requestrr
+   template:
+     metadata:
+       labels:
+         app: requestrr
+     spec:
+      containers:
+         - name: requestrr
+           image: linuxserver/requestrr:2.1.1
+           ports:
+             - containerPort: 4545
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: requestrr
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: requestrr-service
+spec:
+  selector:
+    app: requestrr
+  ports:
+  - protocol: TCP
+    port: 4545
+    targetPort: 4545
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: requestrr-ingress
+spec:
+  rules:
+  - host: requestrr.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: requestrr-service
+            port:
+              number: 4545
