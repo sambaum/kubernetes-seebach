@@ -58,3 +58,23 @@ spec:
             name: heimdall-service
             port:
               number: 80
+  - host: stuff.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: heimdall-service
+            port:
+              number: 80
+  - host: stuff
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: heimdall-service
+            port:
+              number: 80
