@@ -48,7 +48,7 @@ metadata:
   name: heimdall-ingress
 spec:
   rules:
-  - host: heimdall.cube.int.sambaum.ch
+  - host: heimdall.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix

@@ -24,14 +24,22 @@
              - mountPath: /config
                name: config
                subPath: sonarr
+             - mountPath: /downloads
+               name: media
+               subPath: Downloads
              - mountPath: /tv
-               name: tv
+               name: media
                subPath: Video/Series
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
       volumes:
         - name: config
           persistentVolumeClaim:
             claimName: local-conf-pvc
-        - name: tv
+        - name: media
           persistentVolumeClaim:
             claimName: nas-media-pvc
 ---
@@ -54,7 +62,7 @@ metadata:
   name: sonarr-ingress
 spec:
   rules:
-  - host: sonarr.cube.int.sambaum.ch
+  - host: sonarr.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix

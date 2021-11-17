@@ -8,7 +8,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: kubernetes.cube.int.sambaum.ch
+  - host: kubernetes.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix

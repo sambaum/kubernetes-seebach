@@ -48,7 +48,7 @@ metadata:
   name: jackett-ingress
 spec:
   rules:
-  - host: jackett.cube.int.sambaum.ch
+  - host: jackett.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix

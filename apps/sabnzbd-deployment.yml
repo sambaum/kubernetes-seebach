@@ -36,12 +36,12 @@
            - name: PGID
              value: "0"
       volumes:
-        - name: sabnzbd-incomplete
-          persistentVolumeClaim:
-            claimName: local-data-pvc
         - name: config
           persistentVolumeClaim:
             claimName: local-conf-pvc
+        - name: sabnzbd-incomplete
+          persistentVolumeClaim:
+            claimName: local-data-pvc
         - name: sabnzbd-downloads
           persistentVolumeClaim:
             claimName: nas-media-pvc
@@ -65,7 +65,7 @@ metadata:
   name: sabnzbd-ingress
 spec:
   rules:
-  - host: sabnzbd.cube.int.sambaum.ch
+  - host: sabnzbd.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix

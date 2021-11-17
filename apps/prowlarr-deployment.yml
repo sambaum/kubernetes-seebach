@@ -48,7 +48,7 @@ metadata:
   name: prowlarr-ingress
 spec:
   rules:
-  - host: prowlarr.cube.int.sambaum.ch
+  - host: prowlarr.int.sambaum.ch
     http:
       paths:
       - pathType: Prefix
