@@ -166,7 +166,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
   local:
-    path: /conf/data
+    path: /data
   nodeAffinity:
     required:
       nodeSelectorTerms:
