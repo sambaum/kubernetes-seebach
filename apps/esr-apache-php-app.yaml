@@ -1,0 +1,61 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: esr-apache-php-app
+   labels:
+     app: esr-apache-php-app
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: esr-apache-php-app
+   template:
+     metadata:
+       labels:
+         app: esr-apache-php-app
+     spec:
+      containers:
+         - name: esr-apache-php-app
+           image: babatundebusari/docker-apache-php-fpm
+           # image: php:7.2-apache
+           ports:
+             - containerPort: 80
+           volumeMounts:
+             - mountPath: /var/www/html
+               name: config
+               subPath: esr-apache-php-app
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: esr-apache-php-app-service
+spec:
+  selector:
+    app: esr-apache-php-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: esr-apache-php-app-ingress
+spec:
+  rules:
+  - host: esr.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: esr-apache-php-app-service
+            port:
+              number: 80
