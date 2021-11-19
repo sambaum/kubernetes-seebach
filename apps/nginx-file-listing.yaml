@@ -1,0 +1,65 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: nginx-file-listing
+   labels:
+     app: nginx-file-listing
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: nginx-file-listing
+   template:
+     metadata:
+       labels:
+         app: nginx-file-listing
+     spec:
+      containers:
+         - name: nginx-file-listing
+           image: jetbrainsinfra/nginx-file-listing:0.2
+           ports:
+             - containerPort: 80
+           volumeMounts:
+             - mountPath: /mnt/data
+               name: media
+               subPath: Video/Series
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: nas-media-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-file-listing-service
+spec:
+  selector:
+    app: nginx-file-listing
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-file-listing-ingress
+spec:
+  rules:
+  - host: series.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx-file-listing-service
+            port:
+              number: 80
