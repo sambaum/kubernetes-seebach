@@ -1,0 +1,78 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: searcharr
+   labels:
+     app: searcharr
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: searcharr
+   template:
+     metadata:
+       labels:
+         app: searcharr
+     spec:
+      containers:
+         - name: searcharr
+           image: toddrob/searcharr
+           # ports:
+           #   - containerPort: 80
+           volumeMounts:
+             - mountPath: /app/data
+               name: config
+               subPath: searcharr
+             - mountPath: /app/settings.py
+               name: config
+               subPath: searcharr/settings.py
+             - mountPath: /app/logs
+               name: data
+               subPath: searcharr
+           # env:
+           # - name: PUID
+           #   value: "0"
+           # - name: PGID
+           #   value: "0"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: local-data-pvc
+  - name: myfile
+    hostPath:
+      path: /var/local/aaa/1.txt
+      type: FileOrCreate
+---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: searcharr-service
+# spec:
+#   selector:
+#     app: searcharr
+#   ports:
+#   - protocol: TCP
+#     port: 80
+#     targetPort: 80
+#   type: NodePort
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: searcharr-ingress
+# spec:
+#   rules:
+#   - host: series.int.sambaum.ch
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: searcharr-service
+#             port:
+#               number: 80

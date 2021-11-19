@@ -1,0 +1,72 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: filebrowser
+   labels:
+     app: filebrowser
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: filebrowser
+   template:
+     metadata:
+       labels:
+         app: filebrowser
+     spec:
+      containers:
+         - name: filebrowser
+           image: filebrowser/filebrowser:v2
+           ports:
+             - containerPort: 80
+           volumeMounts:
+             - mountPath: /mnt/data
+               name: media
+               subPath: Video/Series
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: nas-media-pvc
+        - name: database
+          hostPath:
+            path: /conf/filebrowser/database.db
+            type: FileOrCreate
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: filebrowser-service
+spec:
+  selector:
+    app: filebrowser
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: filebrowser-ingress
+spec:
+  rules:
+  - host: media.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: filebrowser-service
+            port:
+              number: 80
