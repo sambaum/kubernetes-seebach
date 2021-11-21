@@ -1,0 +1,60 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: organizr
+   labels:
+     app: organizr
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: organizr
+   template:
+     metadata:
+       labels:
+         app: organizr
+     spec:
+      containers:
+         - name: organizr
+           image: organizr/organizr
+           ports:
+             - containerPort: 80
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: organizr
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: organizr-service
+spec:
+  selector:
+    app: organizr
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: organizr-ingress
+spec:
+  rules:
+  - host: organizr.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: organizr-service
+            port:
+              number: 80
