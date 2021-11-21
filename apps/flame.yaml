@@ -1,0 +1,60 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: flame
+   labels:
+     app: flame
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: flame
+   template:
+     metadata:
+       labels:
+         app: flame
+     spec:
+      containers:
+         - name: flame
+           image: pawelmalak/flame:latest
+           ports:
+             - containerPort: 5005
+           volumeMounts:
+             - mountPath: /app/data
+               name: config
+               subPath: flame
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: flame-service
+spec:
+  selector:
+    app: flame
+  ports:
+  - protocol: TCP
+    port: 5005
+    targetPort: 5005
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flame-ingress
+spec:
+  rules:
+  - host: flame.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: flame-service
+            port:
+              number: 5005
