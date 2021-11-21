@@ -21,7 +21,7 @@
            ports:
              - containerPort: 80
            volumeMounts:
-             - mountPath: /mnt/data
+             - mountPath: /mnt/data/temp-phebees5eolooZoodora
                name: media
                subPath: Video/Series
            env:
@@ -54,6 +54,23 @@ metadata:
 spec:
   rules:
   - host: series.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx-file-listing-service
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-file-listing-ingress # rename?
+spec:
+  rules:
+  - host: seebach.sambaum.ch
     http:
       paths:
       - pathType: Prefix
