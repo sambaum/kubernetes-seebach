@@ -2,21 +2,21 @@
  apiVersion: apps/v1
  kind: Deployment
  metadata:
-   name: esr-apache-php-app
+   name: esr-einzahlungsschein
    labels:
-     app: esr-apache-php-app
+     app: esr-einzahlungsschein
  spec:
    replicas: 1
    selector:
       matchLabels:
-        app: esr-apache-php-app
+        app: esr-einzahlungsschein
    template:
      metadata:
        labels:
-         app: esr-apache-php-app
+         app: esr-einzahlungsschein
      spec:
       containers:
-         - name: esr-apache-php-app
+         - name: esr-einzahlungsschein
            image: babatundebusari/docker-apache-php-fpm
            # image: php:7.2-apache
            ports:
@@ -24,7 +24,7 @@
            volumeMounts:
              - mountPath: /var/www/html
                name: config
-               subPath: esr-apache-php-app
+               subPath: esr-einzahlungsschein
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -33,10 +33,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: esr-apache-php-app-service
+  name: esr-einzahlungsschein-service
 spec:
   selector:
-    app: esr-apache-php-app
+    app: esr-einzahlungsschein
   ports:
   - protocol: TCP
     port: 80
@@ -46,7 +46,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: esr-apache-php-app-ingress
+  name: esr-einzahlungsschein-ingress
 spec:
   rules:
   - host: esr.int.sambaum.ch
@@ -56,6 +56,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: esr-apache-php-app-service
+            name: esr-einzahlungsschein-service
             port:
               number: 80
