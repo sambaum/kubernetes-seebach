@@ -23,10 +23,10 @@
            volumeMounts:
              - mountPath: /app/data
                name: config
-               subPath: searcharr
+               subPath: searcharr/data
              - mountPath: /app/settings.py
-               name: config
-               subPath: searcharr/settings.py
+               name: settings
+               # subPath: searcharr/settings.py
              - mountPath: /app/logs
                name: data
                subPath: searcharr
@@ -42,10 +42,10 @@
         - name: data
           persistentVolumeClaim:
             claimName: local-data-pvc
-  - name: myfile
-    hostPath:
-      path: /var/local/aaa/1.txt
-      type: FileOrCreate
+        - name: settings
+          hostPath:
+            path: /conf/searcharr/settings.py
+            type: FileOrCreate
 ---
 # kind: Service
 # apiVersion: v1
