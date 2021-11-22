@@ -1,0 +1,60 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: uptime-kuma
+   labels:
+     app: uptime-kuma
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: uptime-kuma
+   template:
+     metadata:
+       labels:
+         app: uptime-kuma
+     spec:
+      containers:
+         - name: uptime-kuma
+           image: louislam/uptime-kuma:1
+           ports:
+             - containerPort: 3001
+           volumeMounts:
+             - mountPath: /app/data
+               name: config
+               subPath: uptime-kuma
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: uptime-kuma-service
+spec:
+  selector:
+    app: uptime-kuma
+  ports:
+  - protocol: TCP
+    port: 3001
+    targetPort: 3001
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: uptime-kuma-ingress
+spec:
+  rules:
+  - host: uptime-kuma.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: uptime-kuma-service
+            port:
+              number: 3001
