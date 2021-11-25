@@ -1,0 +1,60 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: homer
+   labels:
+     app: homer
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: homer
+   template:
+     metadata:
+       labels:
+         app: homer
+     spec:
+      containers:
+         - name: homer
+           image: b4bz/homer:21.09.2
+           ports:
+             - containerPort: 8080
+           volumeMounts:
+             - mountPath: /www/assets
+               name: config
+               subPath: homer
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: homer-service
+spec:
+  selector:
+    app: homer
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homer-ingress
+spec:
+  rules:
+  - host: homer.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: homer-service
+            port:
+              number: 8080
