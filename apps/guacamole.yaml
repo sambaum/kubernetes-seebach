@@ -1,0 +1,65 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: guacamole
+   labels:
+     app: guacamole
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: guacamole
+   template:
+     metadata:
+       labels:
+         app: guacamole
+     spec:
+      containers:
+         - name: guacamole
+           image: oznu/guacamole:latest
+           ports:
+             - containerPort: 8080
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: guacamole
+           env:
+           - name: EXTENSIONS
+             value: "auth-totp"
+           - name: TZ
+             value: "Europe/Zurich"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: guacamole-service
+spec:
+  selector:
+    app: guacamole
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guacamole-ingress
+spec:
+  rules:
+  - host: guacamole.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: guacamole-service
+            port:
+              number: 8080
