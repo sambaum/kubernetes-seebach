@@ -8,7 +8,7 @@ items:
     blockSize: 26
     cidr: 10.1.0.0/24
     ipipMode: Never
-    natOutgoing: false
+    natOutgoing: true
     nodeSelector: all()
     vxlanMode: Always
 kind: IPPoolList
