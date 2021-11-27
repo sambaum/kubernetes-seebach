@@ -29,6 +29,8 @@
              value: "0"
            - name: PGID
              value: "0"
+           - name: TZ
+             value: "Europe/Zurich"
       volumes:
         - name: media
           persistentVolumeClaim:

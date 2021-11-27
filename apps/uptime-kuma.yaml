@@ -24,6 +24,9 @@
              - mountPath: /app/data
                name: config
                subPath: uptime-kuma
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
       volumes:
         - name: config
           persistentVolumeClaim:

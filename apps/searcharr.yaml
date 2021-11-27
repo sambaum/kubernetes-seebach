@@ -30,7 +30,9 @@
              - mountPath: /app/logs
                name: data
                subPath: searcharr
-           # env:
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
            # - name: PUID
            #   value: "0"
            # - name: PGID

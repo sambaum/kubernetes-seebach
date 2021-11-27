@@ -25,6 +25,9 @@
              - mountPath: /var/www/html
                name: config
                subPath: esr-apache-php-app
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
       volumes:
         - name: config
           persistentVolumeClaim:

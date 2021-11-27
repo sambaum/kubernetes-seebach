@@ -24,6 +24,9 @@
              - mountPath: /app/data
                name: config
                subPath: flame
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
       volumes:
         - name: config
           persistentVolumeClaim:

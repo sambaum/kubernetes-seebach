@@ -24,6 +24,9 @@
              - mountPath: /config
                name: config
                subPath: heimdall
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
       volumes:
         - name: config
           persistentVolumeClaim:

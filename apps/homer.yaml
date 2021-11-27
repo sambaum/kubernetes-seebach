@@ -24,6 +24,9 @@
              - mountPath: /www/assets
                name: config
                subPath: homer
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
       volumes:
         - name: config
           persistentVolumeClaim:
