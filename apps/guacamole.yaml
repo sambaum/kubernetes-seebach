@@ -51,9 +51,30 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: guacamole-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
 spec:
   rules:
   - host: guacamole.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: guacamole-service
+            port:
+              number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guacamole-ingress-2
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+spec:
+  rules:
+  - host: guacamole.sambaum.ch
     http:
       paths:
       - pathType: Prefix
