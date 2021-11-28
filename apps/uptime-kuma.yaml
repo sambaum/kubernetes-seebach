@@ -27,6 +27,8 @@
            env:
            - name: TZ
              value: "Europe/Zurich"
+           - name: UPTIME_KUMA_DISABLE_FRAME_SAMEORIGIN
+             value: "1"
       volumes:
         - name: config
           persistentVolumeClaim:
