@@ -1,0 +1,67 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: homeassistant
+   labels:
+     app: homeassistant
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: homeassistant
+   template:
+     metadata:
+       labels:
+         app: homeassistant
+     spec:
+      containers:
+         - name: homeassistant
+           image: homeassistant/home-assistant:2021.11
+           ports:
+             - containerPort: 8123
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: homeassistant
+           env:
+           - name: EXTENSIONS
+             value: "auth-totp"
+           - name: TZ
+             value: "Europe/Zurich"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: homeassistant-service
+spec:
+  selector:
+    app: homeassistant
+  ports:
+  - protocol: TCP
+    port: 8123
+    targetPort: 8123
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homeassistant-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+spec:
+  rules:
+  - host: homeassistant.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: homeassistant-service
+            port:
+              number: 8123
