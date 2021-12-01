@@ -68,7 +68,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: deluge-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "deluge.int.sambaum.ch"
+    secretName: deluge-tls
   rules:
   - host: deluge.int.sambaum.ch
     http:
