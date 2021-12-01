@@ -1,0 +1,82 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: emby
+   labels:
+     app: emby
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: emby
+   template:
+     metadata:
+       labels:
+         app: emby
+     spec:
+      containers:
+         - name: emby
+           image: linuxserver/emby
+           ports:
+             - containerPort: 8096
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: emby
+             - mountPath: /data/movies
+               name: media
+               subPath: Video/Movies
+             - mountPath: /data/tvshows
+               name: media
+               subPath: Video/Series
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+           - name: TZ
+             value: "Europe/Zurich"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: nas-media-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: emby-service
+spec:
+  selector:
+    app: emby
+  ports:
+  - protocol: TCP
+    port: 8096
+    targetPort: 8096
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: emby-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  tls:
+  - hosts:
+    - "emby.int.sambaum.ch"
+    secretName: emby-tls
+  rules:
+  - host: emby.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: emby-service
+            port:
+              number: 8096
