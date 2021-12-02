@@ -1,0 +1,108 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: paperless
+   labels:
+     app: paperless
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: paperless
+   template:
+     metadata:
+       labels:
+         app: paperless
+     spec:
+      containers:
+         - name: paperless
+           image: linuxserver/paperless-ng:1.5.0
+           ports:
+             - containerPort: 8000
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: paperless
+             - mountPath: /data
+               name: data
+               subPath: paperless
+             - mountPath: /consume
+               name: nas-temp
+               subPath: consume
+             - mountPath: /media
+               name: nas-sam
+               subPath: Paperless
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+           - name: TZ
+             value: "Europe/Zurich"
+           - name: PAPERLESS_CONSUMPTION_DIR
+             value: "/consume"
+           - name: PAPERLESS_CONSUMER_POLLING
+             value: "3"
+           - name: PAPERLESS_AUTO_LOGIN_USERNAME
+             value: "admin"
+           - name: DOCKER_MODS
+             value: "linuxserver/mods:papermerge-multilangocr"
+           - name: OCRLANG
+             value: "deu"
+           - name: PAPERLESS_OCR_LANGUAGE
+             value: "deu+eng"
+           - name: PAPERLESS_FILENAME_FORMAT
+             value: "{tag_list}/{created_year}/{title}"
+           - name: PAPERLESS_MEDIA_ROOT
+             value: "/media"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: local-data-pvc
+        - name: nas-temp
+          persistentVolumeClaim:
+            claimName: nas-temp-pvc
+        - name: nas-sam
+          persistentVolumeClaim:
+            claimName: nas-sam-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: paperless-service
+spec:
+  selector:
+    app: paperless
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paperless-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+spec:
+  tls:
+  - hosts:
+    - "paperless.int.sambaum.ch"
+    secretName: paperless-tls
+  rules:
+  - host: paperless.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: paperless-service
+            port:
+              number: 8000
