@@ -53,9 +53,11 @@
            - name: PAPERLESS_OCR_LANGUAGE
              value: "deu+eng"
            - name: PAPERLESS_FILENAME_FORMAT
-             value: "{tag_list}/{created_year}/{title}"
+             value: "{tag_list}/{created_year}/{correspondent}-{created}-{tag_list}-{title}"
            - name: PAPERLESS_MEDIA_ROOT
              value: "/media"
+           - name: PAPERLESS_WEBSERVER_WORKERS
+             value: "4"
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -90,6 +92,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: allow";
 spec:
   tls:
   - hosts:
