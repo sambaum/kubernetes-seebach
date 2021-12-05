@@ -53,11 +53,15 @@
            - name: PAPERLESS_OCR_LANGUAGE
              value: "deu+eng"
            - name: PAPERLESS_FILENAME_FORMAT
-             value: "{tag_list}/{created_year}/{correspondent}-{created}-{tag_list}-{title}"
+             value: "{document_type}/{created_year}/{correspondent}-{created}-{tag_list}-{title}"
            - name: PAPERLESS_MEDIA_ROOT
              value: "/media"
            - name: PAPERLESS_WEBSERVER_WORKERS
              value: "4"
+           - name: PAPERLESS_IGNORE_DATES
+             value: "02.08.1985,16.12.1979,09.12.2016,19.03.2020"
+           - name: PAPERLESS_CONSUMER_RECURSIVE
+             value: "true"
       volumes:
         - name: config
           persistentVolumeClaim:
