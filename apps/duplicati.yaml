@@ -1,0 +1,92 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: duplicati
+   labels:
+     app: duplicati
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: duplicati
+   template:
+     metadata:
+       labels:
+         app: duplicati
+     spec:
+      containers:
+         - name: duplicati
+           image: linuxserver/duplicati:version-v2.0.6.3-2.0.6.3_beta_2021-06-17
+           ports:
+             - containerPort: 8200
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: duplicati
+             - mountPath: /source/sam
+               name: nas-sam
+             - mountPath: /source/media
+               name: nas-media
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+           - name: TZ
+             value: "Europe/Zurich"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: local-data-pvc
+        - name: nas-temp
+          persistentVolumeClaim:
+            claimName: nas-temp-pvc
+        - name: nas-sam
+          persistentVolumeClaim:
+            claimName: nas-sam-pvc
+        - name: nas-media
+          persistentVolumeClaim:
+            claimName: nas-media-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: duplicati-service
+spec:
+  selector:
+    app: duplicati
+  ports:
+  - protocol: TCP
+    port: 8200
+    targetPort: 8200
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duplicati-ingress
+  annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt-production
+    # nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    # nginx.ingress.kubernetes.io/configuration-snippet: |
+    #   more_set_headers "X-Frame-Options: allow";
+spec:
+  # tls:
+  # - hosts:
+  #   - "duplicati.int.sambaum.ch"
+  #   secretName: duplicati-tls
+  rules:
+  - host: duplicati.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: duplicati-service
+            port:
+              number: 8200
