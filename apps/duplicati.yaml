@@ -28,6 +28,12 @@
                name: nas-sam
              - mountPath: /source/media
                name: nas-media
+             - mountPath: /source/carol
+               name: nas-carol
+             - mountPath: /source/other
+               name: nas-other
+             - mountPath: /source/backup
+               name: nas-backup
            env:
            - name: PUID
              value: "0"
@@ -51,6 +57,15 @@
         - name: nas-media
           persistentVolumeClaim:
             claimName: nas-media-pvc
+        - name: nas-carol
+          persistentVolumeClaim:
+            claimName: nas-carol-pvc
+        - name: nas-other
+          persistentVolumeClaim:
+            claimName: nas-other-pvc
+        - name: nas-backup
+          persistentVolumeClaim:
+            claimName: nas-backup-pvc
 ---
 kind: Service
 apiVersion: v1
