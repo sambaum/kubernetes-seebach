@@ -1,0 +1,66 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: mealie
+   labels:
+     app: mealie
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: mealie
+   template:
+     metadata:
+       labels:
+         app: mealie
+     spec:
+      containers:
+         - name: mealie
+           image: hkotel/mealie:latest
+           ports:
+             - containerPort: 80
+           volumeMounts:
+             - mountPath: /app/data
+               name: config
+               subPath: mealie
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mealie-service
+spec:
+  selector:
+    app: mealie
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mealie-ingress
+  # annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  # tls:
+  # - hosts:
+  #   - "mealie.int.sambaum.ch"
+  #   secretName: mealie-tls
+  rules:
+  - host: mealie.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: mealie-service
+            port:
+              number: 80
