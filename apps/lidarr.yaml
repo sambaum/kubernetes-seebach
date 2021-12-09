@@ -1,0 +1,76 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: lidarr
+   labels:
+     app: lidarr
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: lidarr
+   template:
+     metadata:
+       labels:
+         app: lidarr
+     spec:
+      containers:
+         - name: lidarr
+           image: linuxserver/lidarr:latest
+           ports:
+             - containerPort: 8686
+           volumeMounts:
+             - mountPath: /config
+               name: config
+               subPath: lidarr
+             - mountPath: /downloads
+               name: media
+               subPath: Downloads
+             - mountPath: /music
+               name: media
+               subPath: MP3-Lidarr
+           env:
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+           - name: TZ
+             value: "Europe/Zurich"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: nas-media-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: lidarr-service
+spec:
+  selector:
+    app: lidarr
+  ports:
+  - protocol: TCP
+    port: 8686
+    targetPort: 8686
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lidarr-ingress
+spec:
+  rules:
+  - host: lidarr.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: lidarr-service
+            port:
+              number: 8686
