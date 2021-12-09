@@ -1,0 +1,72 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: crontab-ui
+   labels:
+     app: crontab-ui
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: crontab-ui
+   template:
+     metadata:
+       labels:
+         app: crontab-ui
+     spec:
+      containers:
+         - name: crontab-ui
+           image: alseambusher/crontab-ui:latest
+           ports:
+             - containerPort: 8000
+           volumeMounts:
+             - mountPath: /crontab-ui/crontabs/
+               name: config
+               subPath: crontab-ui
+             - mountPath: /ynab-csv-source/
+               name: temp
+               subPath: YNAB
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: local-conf-pvc
+        - name: temp
+          persistentVolumeClaim:
+            claimName: nas-temp-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: crontab-ui-service
+spec:
+  selector:
+    app: crontab-ui
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crontab-ui-ingress
+  # annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  # tls:
+  # - hosts:
+  #   - "crontab-ui.int.sambaum.ch"
+  #   secretName: crontab-ui-tls
+  rules:
+  - host: crontab-ui.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: crontab-ui-service
+            port:
+              number: 8000
