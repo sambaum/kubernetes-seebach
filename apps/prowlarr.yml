@@ -17,7 +17,7 @@
      spec:
       containers:
          - name: prowlarr
-           image: linuxserver/prowlarr:1.4.1120
+           image: linuxserver/prowlarr:1.8.1229
            ports:
              - containerPort: 9696
            volumeMounts:

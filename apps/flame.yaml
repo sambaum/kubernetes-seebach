@@ -17,7 +17,7 @@
      spec:
       containers:
          - name: flame
-           image: pawelmalak/flame:latest
+           image: pawelmalak/flame:2.1.0
            ports:
              - containerPort: 5005
            volumeMounts:
@@ -27,6 +27,8 @@
            env:
            - name: TZ
              value: "Europe/Zurich"
+           - name: PASSWORD
+             value: "password"
       volumes:
         - name: config
           persistentVolumeClaim:
