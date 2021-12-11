@@ -45,7 +45,7 @@
            - name: PAPERLESS_CONSUMER_POLLING
              value: "3"
            - name: PAPERLESS_AUTO_LOGIN_USERNAME
-             value: "admin"
+             value: "sam"
            - name: DOCKER_MODS
              value: "linuxserver/mods:papermerge-multilangocr"
            - name: OCRLANG
