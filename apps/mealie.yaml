@@ -17,7 +17,7 @@
      spec:
       containers:
          - name: mealie
-           image: hkotel/mealie:latest
+           image: hkotel/mealie:v0.5.4
            ports:
              - containerPort: 80
            volumeMounts:
