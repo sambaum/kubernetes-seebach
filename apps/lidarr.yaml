@@ -1,54 +1,54 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: lidarr
-   labels:
-     app: lidarr
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: lidarr
-   template:
-     metadata:
-       labels:
-         app: lidarr
-     spec:
-      containers:
-         - name: lidarr
-           image: linuxserver/lidarr:latest
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 8686
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: lidarr
-             - mountPath: /downloads
-               name: media
-               subPath: Downloads
-             - mountPath: /music
-               name: media
-               subPath: MP3-Lidarr
-           env:
-           - name: PUID
-             value: "0"
-           - name: PGID
-             value: "0"
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
-        - name: media
-          persistentVolumeClaim:
-            claimName: nas-media-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: lidarr
+ labels:
+   app: lidarr
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: lidarr
+ template:
+   metadata:
+     labels:
+       app: lidarr
+   spec:
+    containers:
+       - name: lidarr
+         image: linuxserver/lidarr:latest
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8686
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: lidarr
+           - mountPath: /downloads
+             name: media
+             subPath: Downloads
+           - mountPath: /music
+             name: media
+             subPath: MP3-Lidarr
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
 ---
 kind: Service
 apiVersion: v1

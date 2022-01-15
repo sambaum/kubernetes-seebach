@@ -1,54 +1,54 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: sonarr
-   labels:
-     app: sonarr
-   annotations:
-     keel.sh/policy: "regexp:^(3|4)[\\d\\.]*$" # dont match 5.14
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: sonarr
-   template:
-     metadata:
-       labels:
-         app: sonarr
-     spec:
-      containers:
-         - name: sonarr
-           image: linuxserver/sonarr:3.0.6
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 8989
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: sonarr
-             - mountPath: /downloads
-               name: media
-               subPath: Downloads
-             - mountPath: /tv
-               name: media
-               subPath: Video/Series
-           env:
-           - name: PUID
-             value: "0"
-           - name: PGID
-             value: "0"
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
-        - name: media
-          persistentVolumeClaim:
-            claimName: nas-media-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: sonarr
+ labels:
+   app: sonarr
+ annotations:
+   keel.sh/policy: "regexp:^(3|4)[\\d\\.]*$" # dont match 5.14
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: sonarr
+ template:
+   metadata:
+     labels:
+       app: sonarr
+   spec:
+    containers:
+       - name: sonarr
+         image: linuxserver/sonarr:3.0.6
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8989
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: sonarr
+           - mountPath: /downloads
+             name: media
+             subPath: Downloads
+           - mountPath: /tv
+             name: media
+             subPath: Video/Series
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
 ---
 kind: Service
 apiVersion: v1

@@ -1,43 +1,43 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: guacamole
-   labels:
-     app: guacamole
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: guacamole
-   template:
-     metadata:
-       labels:
-         app: guacamole
-     spec:
-      containers:
-         - name: guacamole
-           image: oznu/guacamole:latest
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 8080
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: guacamole
-           env:
-           - name: EXTENSIONS
-             value: "auth-totp"
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: guacamole
+ labels:
+   app: guacamole
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: guacamole
+ template:
+   metadata:
+     labels:
+       app: guacamole
+   spec:
+    containers:
+       - name: guacamole
+         image: oznu/guacamole:latest
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8080
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: guacamole
+         env:
+         - name: EXTENSIONS
+           value: "auth-totp"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
 ---
 kind: Service
 apiVersion: v1

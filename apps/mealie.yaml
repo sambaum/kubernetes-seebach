@@ -1,38 +1,38 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: mealie
-   labels:
-     app: mealie
-   annotations:
-     keel.sh/policy: major
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: mealie
-   template:
-     metadata:
-       labels:
-         app: mealie
-     spec:
-      containers:
-         - name: mealie
-           image: hkotel/mealie:v0.5.4
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 80
-           volumeMounts:
-             - mountPath: /app/data
-               name: config
-               subPath: mealie
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mealie
+ labels:
+   app: mealie
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: mealie
+ template:
+   metadata:
+     labels:
+       app: mealie
+   spec:
+    containers:
+       - name: mealie
+         image: hkotel/mealie:v0.5.4
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 80
+         volumeMounts:
+           - mountPath: /app/data
+             name: config
+             subPath: mealie
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
 ---
 kind: Service
 apiVersion: v1

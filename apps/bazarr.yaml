@@ -1,57 +1,57 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: bazarr
-   labels:
-     app: bazarr
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: bazarr
-   template:
-     metadata:
-       labels:
-         app: bazarr
-     spec:
-      containers:
-         - name: bazarr
-           image: linuxserver/bazarr:latest
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 6767
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: bazarr
-             # - mountPath: /downloads
-             #   name: media
-             #   subPath: Downloads
-             - mountPath: /tv
-               name: media
-               subPath: Video/Series
-             - mountPath: /movies
-               name: media
-               subPath: Video/Movies
-           env:
-           - name: PUID
-             value: "0"
-           - name: PGID
-             value: "0"
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
-        - name: media
-          persistentVolumeClaim:
-            claimName: nas-media-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: bazarr
+ labels:
+   app: bazarr
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: bazarr
+ template:
+   metadata:
+     labels:
+       app: bazarr
+   spec:
+    containers:
+       - name: bazarr
+         image: linuxserver/bazarr:latest
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 6767
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: bazarr
+           # - mountPath: /downloads
+           #   name: media
+           #   subPath: Downloads
+           - mountPath: /tv
+             name: media
+             subPath: Video/Series
+           - mountPath: /movies
+             name: media
+             subPath: Video/Movies
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
 ---
 kind: Service
 apiVersion: v1

@@ -1,41 +1,41 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: esr-apache-php-app
-   labels:
-     app: esr-apache-php-app
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: esr-apache-php-app
-   template:
-     metadata:
-       labels:
-         app: esr-apache-php-app
-     spec:
-      containers:
-         - name: esr-apache-php-app
-           image: babatundebusari/docker-apache-php-fpm:latest
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 80
-           volumeMounts:
-             - mountPath: /var/www/html
-               name: config
-               subPath: esr-apache-php-app
-           env:
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: esr-apache-php-app
+ labels:
+   app: esr-apache-php-app
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: esr-apache-php-app
+ template:
+   metadata:
+     labels:
+       app: esr-apache-php-app
+   spec:
+    containers:
+       - name: esr-apache-php-app
+         image: babatundebusari/docker-apache-php-fpm:latest
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 80
+         volumeMounts:
+           - mountPath: /var/www/html
+             name: config
+             subPath: esr-apache-php-app
+         env:
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
 ---
 kind: Service
 apiVersion: v1

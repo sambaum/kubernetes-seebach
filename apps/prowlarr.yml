@@ -1,41 +1,41 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: prowlarr
-   labels:
-     app: prowlarr
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: prowlarr
-   template:
-     metadata:
-       labels:
-         app: prowlarr
-     spec:
-      containers:
-         - name: prowlarr
-           image: linuxserver/prowlarr:develop
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 9696
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: prowlarr
-           env:
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: prowlarr
+ labels:
+   app: prowlarr
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: prowlarr
+ template:
+   metadata:
+     labels:
+       app: prowlarr
+   spec:
+    containers:
+       - name: prowlarr
+         image: linuxserver/prowlarr:develop
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 9696
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: prowlarr
+         env:
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
 ---
 kind: Service
 apiVersion: v1

@@ -1,54 +1,54 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: emby
-   labels:
-     app: emby
-   annotations:
-     keel.sh/policy: "regexp:^(4|5)[\\d\\.]*$"
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: emby
-   template:
-     metadata:
-       labels:
-         app: emby
-     spec:
-      containers:
-         - name: emby
-           image: linuxserver/emby:4.6.7
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 8096
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: emby
-             - mountPath: /data/movies
-               name: media
-               subPath: Video/Movies
-             - mountPath: /data/tvshows
-               name: media
-               subPath: Video/Series
-           env:
-           - name: PUID
-             value: "0"
-           - name: PGID
-             value: "0"
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
-        - name: media
-          persistentVolumeClaim:
-            claimName: nas-media-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: emby
+ labels:
+   app: emby
+ annotations:
+   keel.sh/policy: "regexp:^(4|5)[\\d\\.]*$"
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: emby
+ template:
+   metadata:
+     labels:
+       app: emby
+   spec:
+    containers:
+       - name: emby
+         image: linuxserver/emby:4.6.7
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8096
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: emby
+           - mountPath: /data/movies
+             name: media
+             subPath: Video/Movies
+           - mountPath: /data/tvshows
+             name: media
+             subPath: Video/Series
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
 ---
 kind: Service
 apiVersion: v1

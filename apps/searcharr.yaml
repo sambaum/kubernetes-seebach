@@ -1,58 +1,58 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: searcharr
-   labels:
-     app: searcharr
-   annotations:
-     keel.sh/policy: major
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: searcharr
-   template:
-     metadata:
-       labels:
-         app: searcharr
-     spec:
-      containers:
-         - name: searcharr
-           image: toddrob/searcharr:v1.5
-           imagePullPolicy: Always
-           # ports:
-           #   - containerPort: 80
-           volumeMounts:
-             - mountPath: /app/data
-               name: config
-               subPath: searcharr/data
-             - mountPath: /app/settings.py
-               name: settings
-               # subPath: searcharr/settings.py
-             - mountPath: /app/logs
-               name: data
-               subPath: searcharr
-           env:
-           - name: TZ
-             value: "Europe/Zurich"
-           # - name: PUID
-           #   value: "0"
-           # - name: PGID
-           #   value: "0"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
-        - name: data
-          persistentVolumeClaim:
-            claimName: local-data-pvc
-        - name: settings
-          hostPath:
-            path: /conf/searcharr/settings.py
-            type: FileOrCreate
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: searcharr
+ labels:
+   app: searcharr
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: searcharr
+ template:
+   metadata:
+     labels:
+       app: searcharr
+   spec:
+    containers:
+       - name: searcharr
+         image: toddrob/searcharr:v1.5
+         imagePullPolicy: Always
+         # ports:
+         #   - containerPort: 80
+         volumeMounts:
+           - mountPath: /app/data
+             name: config
+             subPath: searcharr/data
+           - mountPath: /app/settings.py
+             name: settings
+             # subPath: searcharr/settings.py
+           - mountPath: /app/logs
+             name: data
+             subPath: searcharr
+         env:
+         - name: TZ
+           value: "Europe/Zurich"
+         # - name: PUID
+         #   value: "0"
+         # - name: PGID
+         #   value: "0"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: local-data-pvc
+      - name: settings
+        hostPath:
+          path: /conf/searcharr/settings.py
+          type: FileOrCreate
 ---
 # kind: Service
 # apiVersion: v1

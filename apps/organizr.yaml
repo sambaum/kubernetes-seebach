@@ -1,38 +1,38 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: organizr
-   labels:
-     app: organizr
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: organizr
-   template:
-     metadata:
-       labels:
-         app: organizr
-     spec:
-      containers:
-         - name: organizr
-           image: organizr/organizr:latest
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 80
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: organizr
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: organizr
+ labels:
+   app: organizr
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: organizr
+ template:
+   metadata:
+     labels:
+       app: organizr
+   spec:
+    containers:
+       - name: organizr
+         image: organizr/organizr:latest
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 80
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: organizr
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
 ---
 kind: Service
 apiVersion: v1

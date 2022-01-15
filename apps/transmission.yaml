@@ -1,65 +1,65 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: transmission
-   labels:
-     app: transmission
-   annotations:
-     keel.sh/policy: force
-     keel.sh/trigger: poll
-     keel.sh/approvals: "1"
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: transmission
-   template:
-     metadata:
-       labels:
-         app: transmission
-       annotations: {
-         "cni.projectcalico.org/ipAddrs": "[\"10.1.1.2\"]"
-       }
-     spec:
-      containers:
-         - name: transmission
-           image: linuxserver/transmission:3.00-r2-ls107
-           imagePullPolicy: Always
-           ports:
-             - containerPort: 9091
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: transmission
-             - mountPath: /downloads
-               name: transmission-downloads
-               subPath: Downloads
-             - mountPath: /watch
-               name: transmission-downloads
-               subPath: Downloads/watched/transmission
-             - mountPath: /incomplete-downloads
-               name: transmission-incomplete
-               subPath: transmission/incomplete-downloads
-           env:
-           - name: PUID
-             value: "0"
-           - name: PGID
-             value: "0"
-           - name: TZ
-             value: "Europe/Zurich"
-           - name: TRANSMISSION_WEB_HOME
-             value: "/flood-for-transmission/"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
-        - name: transmission-incomplete
-          persistentVolumeClaim:
-            claimName: local-data-pvc
-        - name: transmission-downloads
-          persistentVolumeClaim:
-            claimName: nas-media-pvc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: transmission
+ labels:
+   app: transmission
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: transmission
+ template:
+   metadata:
+     labels:
+       app: transmission
+     annotations: {
+       "cni.projectcalico.org/ipAddrs": "[\"10.1.1.2\"]"
+     }
+   spec:
+    containers:
+       - name: transmission
+         image: linuxserver/transmission:3.00-r2-ls107
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 9091
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: transmission
+           - mountPath: /downloads
+             name: transmission-downloads
+             subPath: Downloads
+           - mountPath: /watch
+             name: transmission-downloads
+             subPath: Downloads/watched/transmission
+           - mountPath: /incomplete-downloads
+             name: transmission-incomplete
+             subPath: transmission/incomplete-downloads
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+         - name: TRANSMISSION_WEB_HOME
+           value: "/flood-for-transmission/"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: transmission-incomplete
+        persistentVolumeClaim:
+          claimName: local-data-pvc
+      - name: transmission-downloads
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
 ---
 kind: Service
 apiVersion: v1
