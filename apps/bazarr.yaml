@@ -5,6 +5,10 @@
    name: bazarr
    labels:
      app: bazarr
+   annotations:
+     keel.sh/policy: force
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: bazarr
-           image: linuxserver/bazarr
+           image: linuxserver/bazarr:latest
+           imagePullPolicy: Always
            ports:
              - containerPort: 6767
            volumeMounts:

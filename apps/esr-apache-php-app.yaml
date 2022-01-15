@@ -5,6 +5,10 @@
    name: esr-apache-php-app
    labels:
      app: esr-apache-php-app
+   annotations:
+     keel.sh/policy: force
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,8 +21,8 @@
      spec:
       containers:
          - name: esr-apache-php-app
-           image: babatundebusari/docker-apache-php-fpm
-           # image: php:7.2-apache
+           image: babatundebusari/docker-apache-php-fpm:latest
+           imagePullPolicy: Always
            ports:
              - containerPort: 80
            volumeMounts:

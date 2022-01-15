@@ -5,6 +5,10 @@
    name: paperless
    labels:
      app: paperless
+   annotations:
+     keel.sh/policy: major
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -18,6 +22,7 @@
       containers:
          - name: paperless
            image: linuxserver/paperless-ng:1.5.0
+           imagePullPolicy: Always
            ports:
              - containerPort: 8000
            volumeMounts:

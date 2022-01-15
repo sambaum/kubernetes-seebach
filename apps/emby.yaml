@@ -5,6 +5,10 @@
    name: emby
    labels:
      app: emby
+   annotations:
+     keel.sh/policy: "regexp:^(4|5)[\\d\\.]*$"
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: emby
-           image: linuxserver/emby
+           image: linuxserver/emby:4.6.7
+           imagePullPolicy: Always
            ports:
              - containerPort: 8096
            volumeMounts:

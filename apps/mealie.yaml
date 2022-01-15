@@ -5,6 +5,10 @@
    name: mealie
    labels:
      app: mealie
+   annotations:
+     keel.sh/policy: major
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -18,6 +22,7 @@
       containers:
          - name: mealie
            image: hkotel/mealie:v0.5.4
+           imagePullPolicy: Always
            ports:
              - containerPort: 80
            volumeMounts:

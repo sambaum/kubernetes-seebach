@@ -5,6 +5,10 @@
    name: crontab-ui
    labels:
      app: crontab-ui
+   annotations:
+     keel.sh/policy: major
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: crontab-ui
-           image: alseambusher/crontab-ui:latest
+           image: alseambusher/crontab-ui:0.3.15
+           imagePullPolicy: Always
            ports:
              - containerPort: 8000
            volumeMounts:

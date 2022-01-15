@@ -5,6 +5,10 @@
    name: radarr
    labels:
      app: radarr
+   annotations:
+     keel.sh/policy: "regexp:^(3|4)[\\d\\.]*$" # dont match 5.14
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: radarr
-           image: linuxserver/radarr:version-3.2.2.5080
+           image: linuxserver/radarr:3.2.2
+           imagePullPolicy: Always
            ports:
              - containerPort: 7878
            volumeMounts:

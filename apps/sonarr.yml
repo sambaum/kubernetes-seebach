@@ -5,6 +5,10 @@
    name: sonarr
    labels:
      app: sonarr
+   annotations:
+     keel.sh/policy: "regexp:^(3|4)[\\d\\.]*$" # dont match 5.14
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: sonarr
-           image: linuxserver/sonarr:0.6.1342
+           image: linuxserver/sonarr:3.0.6
+           imagePullPolicy: Always
            ports:
              - containerPort: 8989
            volumeMounts:

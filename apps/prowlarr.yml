@@ -5,6 +5,10 @@
    name: prowlarr
    labels:
      app: prowlarr
+   annotations:
+     keel.sh/policy: force
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: prowlarr
-           image: linuxserver/prowlarr:1.8.1229
+           image: linuxserver/prowlarr:develop
+           imagePullPolicy: Always
            ports:
              - containerPort: 9696
            volumeMounts:

@@ -5,6 +5,10 @@
    name: organizr
    labels:
      app: organizr
+   annotations:
+     keel.sh/policy: force
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: organizr
-           image: organizr/organizr
+           image: organizr/organizr:latest
+           imagePullPolicy: Always
            ports:
              - containerPort: 80
            volumeMounts:

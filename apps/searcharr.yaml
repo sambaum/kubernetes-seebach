@@ -5,6 +5,10 @@
    name: searcharr
    labels:
      app: searcharr
+   annotations:
+     keel.sh/policy: major
+     keel.sh/trigger: poll
+     keel.sh/approvals: "1"
  spec:
    replicas: 1
    selector:
@@ -17,7 +21,8 @@
      spec:
       containers:
          - name: searcharr
-           image: toddrob/searcharr
+           image: toddrob/searcharr:v1.5
+           imagePullPolicy: Always
            # ports:
            #   - containerPort: 80
            volumeMounts:
