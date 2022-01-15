@@ -5,6 +5,10 @@ metadata:
  name: keel
  labels:
    app: keel
+ annotations:
+   keel.sh/policy: force
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
 spec:
  replicas: 1
  selector:
@@ -18,6 +22,7 @@ spec:
     containers:
        - name: keel
          image: keelhq/keel:latest
+         imagePullPolicy: Always
          ports:
            - containerPort: 9300
          env:
