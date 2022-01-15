@@ -29,9 +29,6 @@ spec:
            - mountPath: /config
              name: config
              subPath: bazarr
-           # - mountPath: /downloads
-           #   name: media
-           #   subPath: Downloads
            - mountPath: /tv
              name: media
              subPath: Video/Series

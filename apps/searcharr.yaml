@@ -23,8 +23,6 @@ spec:
        - name: searcharr
          image: toddrob/searcharr:v1.5
          imagePullPolicy: Always
-         # ports:
-         #   - containerPort: 80
          volumeMounts:
            - mountPath: /app/data
              name: config
@@ -38,10 +36,6 @@ spec:
          env:
          - name: TZ
            value: "Europe/Zurich"
-         # - name: PUID
-         #   value: "0"
-         # - name: PGID
-         #   value: "0"
     volumes:
       - name: config
         persistentVolumeClaim:
@@ -53,33 +47,3 @@ spec:
         hostPath:
           path: /conf/searcharr/settings.py
           type: FileOrCreate
----
-# kind: Service
-# apiVersion: v1
-# metadata:
-#   name: searcharr-service
-# spec:
-#   selector:
-#     app: searcharr
-#   ports:
-#   - protocol: TCP
-#     port: 80
-#     targetPort: 80
-#   type: NodePort
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: searcharr-ingress
-# spec:
-#   rules:
-#   - host: series.int.sambaum.ch
-#     http:
-#       paths:
-#       - pathType: Prefix
-#         path: "/"
-#         backend:
-#           service:
-#             name: searcharr-service
-#             port:
-#               number: 80

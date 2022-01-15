@@ -51,13 +51,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mealie-ingress
-  # annotations:
-    # cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
-  # tls:
-  # - hosts:
-  #   - "mealie.int.sambaum.ch"
-  #   secretName: mealie-tls
   rules:
   - host: mealie.int.sambaum.ch
     http:
