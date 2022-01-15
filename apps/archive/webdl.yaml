@@ -1,0 +1,73 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: webdl
+   labels:
+     app: webdl
+ spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app: webdl
+   template:
+     metadata:
+       labels:
+         app: webdl
+     spec:
+      containers:
+         - name: webdl
+           image: trastle/webdl
+           # ports:
+           #   - containerPort: 5005
+           volumeMounts:
+             - mountPath: /home/webdl/data
+               name: data
+               subPath: webdl
+             - mountPath: /home/webdl/patterns.txt
+               name: patterns
+           env:
+           - name: TZ
+             value: "Europe/Zurich"
+           - name: PUID
+             value: "0"
+           - name: PGID
+             value: "0"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: local-data-pvc
+        - name: patterns
+          hostPath:
+            path: /conf/webdl/patterns.txt
+            type: FileOrCreate
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: webdl-service
+# spec:
+#   selector:
+#     app: webdl
+#   ports:
+#   - protocol: TCP
+#     port: 5005
+#     targetPort: 5005
+#   type: NodePort
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: webdl-ingress
+# spec:
+#   rules:
+#   - host: webdl.int.sambaum.ch
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: webdl-service
+#             port:
+#               number: 5005
