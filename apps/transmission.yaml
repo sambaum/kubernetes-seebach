@@ -6,7 +6,7 @@ metadata:
  labels:
    app: transmission
  annotations:
-   keel.sh/policy: force
+   keel.sh/policy: major
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
 spec:
@@ -24,7 +24,7 @@ spec:
    spec:
     containers:
        - name: transmission
-         image: linuxserver/transmission:3.00-r2-ls107
+         image: linuxserver/transmission:version-3.00-r2
          imagePullPolicy: Always
          ports:
            - containerPort: 9091
