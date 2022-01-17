@@ -9,6 +9,7 @@ metadata:
    keel.sh/policy: "regexp:^(4|5)[\\d\\.]*$"
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
 spec:
  replicas: 1
  selector:
