@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: guacamole
-         image: oznu/guacamole:latest
+         image: oznu/guacamole:1.3.0-latest
          imagePullPolicy: Always
          ports:
            - containerPort: 8080
