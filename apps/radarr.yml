@@ -6,7 +6,7 @@ metadata:
  labels:
    app: radarr
  annotations:
-   keel.sh/policy: "regexp:^version-.*$"
+   keel.sh/policy: "glob:version-*"
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
    keel.sh/pollSchedule: "@hourly"
