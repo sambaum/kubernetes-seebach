@@ -1,0 +1,141 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: plex
+ labels:
+   app: plex
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: plex
+ template:
+   metadata:
+     labels:
+       app: plex
+   spec:
+    # hostNetwork: true
+    containers:
+       - name: plex
+         image: linuxserver/plex:latest
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 32400
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: plex
+           - mountPath: /movies
+             name: media
+             subPath: Video/Movies
+           - mountPath: /tv
+             name: media
+             subPath: Video/Series
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+         - name: VERSION
+           value: "docker"
+         - name: PLEX_CLAIM
+           value: "claim-6Gm-3xxzAoUksbuu-zkG"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: plex-service
+spec:
+  selector:
+    app: plex
+  ports:
+  - protocol: TCP
+    name: tcp-32400
+    port: 32400
+    targetPort: 32400
+  - protocol: TCP
+    name: tcp-1900
+    port: 1900
+    targetPort: 1900
+  - protocol: TCP
+    name: tcp-3005
+    port: 3005
+    targetPort: 3005
+  - protocol: TCP
+    name: tcp-5353
+    port: 5353
+    targetPort: 5353
+  - protocol: TCP
+    name: tcp-8324
+    port: 8324
+    targetPort: 8324
+  - protocol: TCP
+    name: tcp-32410
+    port: 32410
+    targetPort: 32410
+  - protocol: TCP
+    name: tcp-32412
+    port: 32412
+    targetPort: 32412
+  - protocol: TCP
+    name: tcp-32413
+    port: 32413
+    targetPort: 32413
+  - protocol: TCP
+    name: tcp-32414
+    port: 32414
+    targetPort: 32414
+  - protocol: TCP
+    name: tcp-32469
+    port: 32469
+    targetPort: 32469
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-ingress
+spec:
+  rules:
+  - host: plex.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: plex-service
+            port:
+              number: 32400
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-ingress-2
+spec:
+  rules:
+  - host: plex.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: plex-service
+            port:
+              number: 32400
