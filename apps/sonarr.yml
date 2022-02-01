@@ -6,7 +6,7 @@ metadata:
  labels:
    app: sonarr
  annotations:
-   keel.sh/policy: "regexp:^(3|4)[\\d\\.]*$" # dont match 5.14
+   keel.sh/policy: "regexp:^version-.*$"
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
    keel.sh/pollSchedule: "@hourly"
@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: sonarr
-         image: linuxserver/sonarr:3.0.6
+         image: linuxserver/sonarr:version-3.0.6.1342
          imagePullPolicy: Always
          ports:
            - containerPort: 8989

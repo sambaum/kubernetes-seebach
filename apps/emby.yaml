@@ -6,7 +6,7 @@ metadata:
  labels:
    app: emby
  annotations:
-   keel.sh/policy: "regexp:^(4|5)[\\d\\.]*$"
+   keel.sh/policy: "regexp:^version-.*$"
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
    keel.sh/pollSchedule: "@hourly"
@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: emby
-         image: linuxserver/emby:4.6.7
+         image: linuxserver/emby:version-4.6.7.0
          imagePullPolicy: Always
          ports:
            - containerPort: 8096
