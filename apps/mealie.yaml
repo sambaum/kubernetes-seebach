@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: mealie
-         image: hkotel/mealie:v0.5.4
+         image: hkotel/mealie:v0.5.6
          imagePullPolicy: Always
          ports:
            - containerPort: 80
