@@ -27,3 +27,6 @@ items:
     nodeSelector: "!all()"
     vxlanMode: Always
 kind: IPPoolList
+
+# Comment:
+# Old pool has to be deleted first: kubectl calico delete pool default-ipv4-ippool
