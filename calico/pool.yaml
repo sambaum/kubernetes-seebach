@@ -1,3 +1,5 @@
+# Standard Pool
+# Old pool has to be deleted first: kubectl calico delete pool default-ipv4-ippool
 apiVersion: projectcalico.org/v3
 items:
 - apiVersion: projectcalico.org/v3
@@ -13,6 +15,8 @@ items:
     vxlanMode: Always
 kind: IPPoolList
 ---
+
+# No NAT Pool
 apiVersion: projectcalico.org/v3
 items:
 - apiVersion: projectcalico.org/v3
@@ -27,6 +31,20 @@ items:
     nodeSelector: "!all()"
     vxlanMode: Always
 kind: IPPoolList
+---
 
-# Comment:
-# Old pool has to be deleted first: kubectl calico delete pool default-ipv4-ippool
+# No NAT and force through VPN
+apiVersion: projectcalico.org/v3
+items:
+- apiVersion: projectcalico.org/v3
+  kind: IPPool
+  metadata:
+    name: fixed-ipv4-ippool-vpn
+  spec:
+    blockSize: 26
+    cidr: 10.1.2.0/24
+    ipipMode: Never
+    natOutgoing: false
+    nodeSelector: "!all()"
+    vxlanMode: Always
+kind: IPPoolList
