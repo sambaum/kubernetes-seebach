@@ -18,3 +18,13 @@ spec:
             name: portainer
             port:
               number: 9443
+  - host: kubus-portainer.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: portainer
+            port:
+              number: 9443

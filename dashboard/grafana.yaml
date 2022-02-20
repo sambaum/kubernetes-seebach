@@ -20,3 +20,13 @@ spec:
             name: grafana
             port:
               number: 3000
+  - host: kubus-grafana.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 3000

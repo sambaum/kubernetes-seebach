@@ -11,6 +11,7 @@ spec:
   tls:
   - hosts:
     - "kubernetes.int.sambaum.ch"
+    - "kubus-dashboard.int.sambaum.ch"
     secretName: kubernetes-tls
   rules:
   - host: kubernetes.int.sambaum.ch
@@ -23,3 +24,14 @@ spec:
             name: kubernetes-dashboard
             port:
               number: 443
+  - host: kubus-dashboard.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 443
+
