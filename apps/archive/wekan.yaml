@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: wekan
+ labels:
+   app: wekan
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: wekan
+ template:
+   metadata:
+     labels:
+       app: wekan
+   spec:
+    containers:
+       - name: wekan
+         image: wekanteam/wekan:v6.05
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8080
+         volumeMounts:
+           - mountPath: /idontknow
+             name: config
+             subPath: wekan
+         env:
+         - name: ROOT_URL
+           value: "http://wekan.int.sambaum.ch/"
+         - name: MONGO_URL
+           value: "mongodb://localhost:27017/wekan"
+       - name: wekanmongodb
+         image: bitnami/mongodb
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 27017
+         volumeMounts:
+           - mountPath: /bitnami/mongodb
+             name: config
+             subPath: wekanmongodb
+         env:
+         - name: ALLOW_EMPTY_PASSWORD
+           value: "yes"
+         # - name: MONGO_URL
+         #   value: "mongodb://localhost:27017/wekan"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: wekan-service
+spec:
+  selector:
+    app: wekan
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wekan-ingress
+spec:
+  rules:
+  - host: wekan.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: wekan-service
+            port:
+              number: 8080
