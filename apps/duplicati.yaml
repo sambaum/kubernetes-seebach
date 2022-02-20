@@ -49,9 +49,9 @@ spec:
            value: "0"
          - name: TZ
            value: "Europe/Zurich"
-         resources:
-           limits:
-             cpu: "1.5"
+         # resources:
+         #   limits:
+         #     cpu: "1.5"
     volumes:
       - name: config
         persistentVolumeClaim:
