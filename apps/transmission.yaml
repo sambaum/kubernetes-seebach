@@ -20,7 +20,8 @@ spec:
      labels:
        app: transmission
      annotations: {
-       "cni.projectcalico.org/ipAddrs": "[\"10.1.1.2\"]"
+       # "cni.projectcalico.org/ipAddrs": "[\"10.1.1.2\"]" # replace with cni.projectcalico.org/ipv4pools: '["pool-1", "pool-2"]'
+       cni.projectcalico.org/ipv4pools: '["fixed-ipv4-ippool-vpn"]'
      }
    spec:
     containers:
