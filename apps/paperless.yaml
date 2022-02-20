@@ -34,8 +34,8 @@ spec:
              name: data
              subPath: paperless
            - mountPath: /consume
-             name: nas-temp
-             subPath: consume
+             name: nas-sam
+             subPath: Paperless-Consume
            - mountPath: /media
              name: nas-sam
              subPath: Paperless
