@@ -36,6 +36,15 @@ spec:
            - mountPath: /data/tvshows
              name: media
              subPath: Video/Series
+           # - mountPath: /data/home-videos
+           #   name: nas-sam
+           #   subPath: Personal/Videos/Done
+           - mountPath: /data/home-videos
+             name: media
+             subPath: Video/Home-Movies
+           - mountPath: /data/home-photos
+             name: nas-sam
+             subPath: Personal/Fotos/Publish
          env:
          - name: PUID
            value: "0"
@@ -50,6 +59,9 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: nas-media-pvc
+      - name: nas-sam
+        persistentVolumeClaim:
+          claimName: nas-sam-pvc
 ---
 kind: Service
 apiVersion: v1
