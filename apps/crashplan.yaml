@@ -1,36 +1,68 @@
 ---
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: crashplan
-   labels:
-     app: crashplan
- spec:
-   replicas: 1
-   selector:
-      matchLabels:
-        app: crashplan
-   template:
-     metadata:
-       labels:
-         app: crashplan
-     spec:
-      containers:
-         - name: crashplan
-           image: jlesage/crashplan-pro:v2.15.1
-           ports:
-             - containerPort: 5800
-           volumeMounts:
-             - mountPath: /config
-               name: config
-               subPath: crashplan
-           env:
-           - name: TZ
-             value: "Europe/Zurich"
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: local-conf-pvc
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: crashplan
+ labels:
+   app: crashplan
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ serviceName: "crashplan"
+ replicas: 1
+ selector:
+    matchLabels:
+      app: crashplan
+ template:
+   metadata:
+     labels:
+       app: crashplan
+   spec:
+    containers:
+       - name: crashplan
+         image: jlesage/crashplan-pro:v2.16.7
+         ports:
+           - containerPort: 5800
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: crashplan
+         volumeMounts:
+           - mountPath: /mnt/NetworkDrives/media/
+             name: nas-media
+           - mountPath: /mnt/NetworkDrives/sam/
+             name: nas-sam
+           - mountPath: /mnt/NetworkDrives/carol/
+             name: nas-carol
+           - mountPath: /mnt/NetworkDrives/other/
+             name: nas-other
+           - mountPath: /mnt/NetworkDrives/backup/
+             name: nas-backup
+         env:
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: nas-media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
+      - name: nas-sam
+        persistentVolumeClaim:
+          claimName: nas-sam-pvc
+      - name: nas-carol
+        persistentVolumeClaim:
+          claimName: nas-carol-pvc
+      - name: nas-other
+        persistentVolumeClaim:
+          claimName: nas-other-pvc
+      - name: nas-backup
+        persistentVolumeClaim:
+          claimName: nas-backup-pvc
 ---
 kind: Service
 apiVersion: v1
