@@ -55,7 +55,7 @@ spec:
          - name: DOCKER_MODS
            value: "linuxserver/mods:papermerge-multilangocr"
          - name: OCRLANG
-           value: "deu"
+           value: "deu,eng"
          - name: PAPERLESS_OCR_LANGUAGE
            value: "deu+eng"
          - name: PAPERLESS_FILENAME_FORMAT
