@@ -46,7 +46,7 @@ spec:
          - name: IPAM_DATABASE_PASS
            value: "my_secret_phpipam_pass"
          - name: SCAN_INTERVAL
-           value: "1h"
+           value: "10m"
        - name: phpipam-mariadb
          image: mariadb:latest
          imagePullPolicy: Always
