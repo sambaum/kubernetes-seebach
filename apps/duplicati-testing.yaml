@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: duplicati-testing
+ labels:
+   app: duplicati-testing
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: duplicati-testing
+ template:
+   metadata:
+     labels:
+       app: duplicati-testing
+   spec:
+    containers:
+       - name: duplicati-testing
+         image: linuxserver/duplicati:2.0.6
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8200
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: duplicati-testing
+           - mountPath: /source/sam
+             name: nas-sam
+           - mountPath: /source/media
+             name: nas-media
+           - mountPath: /source/carol
+             name: nas-carol
+           - mountPath: /source/other
+             name: nas-other
+           - mountPath: /source/backup
+             name: nas-backup
+           - mountPath: /source/conf
+             name: config
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: local-data-pvc
+      - name: nas-temp
+        persistentVolumeClaim:
+          claimName: nas-temp-pvc
+      - name: nas-sam
+        persistentVolumeClaim:
+          claimName: nas-sam-pvc
+      - name: nas-media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
+      - name: nas-carol
+        persistentVolumeClaim:
+          claimName: nas-carol-pvc
+      - name: nas-other
+        persistentVolumeClaim:
+          claimName: nas-other-pvc
+      - name: nas-backup
+        persistentVolumeClaim:
+          claimName: nas-backup-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: duplicati-testing-service
+spec:
+  selector:
+    app: duplicati-testing
+  ports:
+  - protocol: TCP
+    port: 8200
+    targetPort: 8200
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duplicati-testing-ingress
+  annotations:
+spec:
+  rules:
+  - host: duplicati-testing.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: duplicati-testing-service
+            port:
+              number: 8200
