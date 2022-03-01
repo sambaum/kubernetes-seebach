@@ -30,7 +30,6 @@ spec:
            - mountPath: /config
              name: config
              subPath: crashplan
-         volumeMounts:
            - mountPath: /mnt/NetworkDrives/media/
              name: nas-media
            - mountPath: /mnt/NetworkDrives/sam/
@@ -44,6 +43,12 @@ spec:
          env:
          - name: TZ
            value: "Europe/Zurich"
+         - name: USER_ID
+           value: "0"
+         - name: GROUP_ID
+           value: "0"
+         - name: CRASHPLAN_SRV_MAX_MEM
+           value: "16G"
     volumes:
       - name: config
         persistentVolumeClaim:
