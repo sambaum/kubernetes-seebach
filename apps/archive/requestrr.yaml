@@ -45,7 +45,6 @@ spec:
   - protocol: TCP
     port: 4545
     targetPort: 4545
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

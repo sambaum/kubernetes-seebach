@@ -43,7 +43,6 @@ spec:
   - protocol: TCP
     port: 9117
     targetPort: 9117
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

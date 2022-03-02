@@ -80,7 +80,6 @@ spec:
   - protocol: TCP
     port: 5800
     targetPort: 5800
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

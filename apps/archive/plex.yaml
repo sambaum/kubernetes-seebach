@@ -104,7 +104,6 @@ spec:
     name: tcp-32469
     port: 32469
     targetPort: 32469
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

@@ -62,7 +62,6 @@ spec:
   - protocol: TCP
     port: 6767
     targetPort: 6767
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

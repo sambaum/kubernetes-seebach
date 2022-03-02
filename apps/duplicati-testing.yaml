@@ -86,7 +86,6 @@ spec:
   - protocol: TCP
     port: 8200
     targetPort: 8200
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

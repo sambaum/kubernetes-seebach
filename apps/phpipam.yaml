@@ -73,7 +73,6 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
-  type: NodePort
 ---
 kind: Service
 apiVersion: v1
@@ -86,7 +85,6 @@ spec:
   - protocol: TCP
     port: 3306
     targetPort: 3306
-  # type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

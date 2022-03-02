@@ -45,7 +45,6 @@ spec:
   - protocol: TCP
     port: 9300
     targetPort: 9300
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
