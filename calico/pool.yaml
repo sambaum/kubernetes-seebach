@@ -1,5 +1,6 @@
 # Standard Pool
 # Old pool has to be deleted first: kubectl calico delete pool default-ipv4-ippool
+# then: kubectl calico apply -f pool.yaml
 apiVersion: projectcalico.org/v3
 items:
 - apiVersion: projectcalico.org/v3
