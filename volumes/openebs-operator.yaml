@@ -938,7 +938,7 @@ spec:
         - name: OPENEBS_IO_HELPER_IMAGE
           value: "openebs/linux-utils:3.1.0"
         - name: OPENEBS_IO_BASE_PATH
-          value: "/var/openebs/local"
+          value: "/conf/openebs/local"
         # LEADER_ELECTION_ENABLED is used to enable/disable leader election. By default
         # leader election is enabled.
         #- name: LEADER_ELECTION_ENABLED
