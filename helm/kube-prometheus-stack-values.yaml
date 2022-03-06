@@ -2429,7 +2429,7 @@ prometheus:
     #
      volumeClaimTemplate:
        spec:
-         storageClassName: local-hostpath
+         storageClassName: openebs-local-hostpath-conf
          accessModes: ["ReadWriteOnce"]
          resources:
            requests:

@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Frame-Options: allow";
   name: grafana
-  namespace: monitoring
+  namespace: default
 spec:
   rules:
   - host: grafana.int.sambaum.ch
@@ -19,7 +19,7 @@ spec:
           service:
             name: grafana
             port:
-              number: 3000
+              number: 80
   - host: kubus-grafana.int.sambaum.ch
     http:
       paths:
@@ -27,6 +27,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: grafana
+            name: prometheus-grafana
             port:
-              number: 3000
+              number: 80
