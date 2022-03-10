@@ -27,6 +27,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: prometheus-grafana
+            name: prometheus-stack-grafana
             port:
               number: 80
