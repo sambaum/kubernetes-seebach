@@ -7,14 +7,11 @@ loki:
       - ReadWriteOnce
     size: 1Gi
 
-# Syslog: Use RFC 5424
 promtail:
   enabled: true
   syslogService:
     enabled: true
-    type: NodePort
     port: 1514
-    nodePort: 31514
   extraScrapeConfigs:
     - job_name: syslog
       syslog:

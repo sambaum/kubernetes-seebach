@@ -24,8 +24,6 @@ spec:
        - name: syslog-ng
          image: linuxserver/syslog-ng:3.30.1
          imagePullPolicy: Always
-         # ports:
-         #   - containerPort: 6601
          volumeMounts:
            - mountPath: /config
              name: config
@@ -51,9 +49,9 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: syslog-ng-service
+  name: syslog-ng-service-tcp
   annotations:
-    metallb.universe.tf/allow-shared-ip: "hare-192.168.1.26"
+    metallb.universe.tf/allow-shared-ip: "share-192.168.1.26"
 spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.1.26
@@ -70,7 +68,7 @@ apiVersion: v1
 metadata:
   name: syslog-ng-service-udp
   annotations:
-    metallb.universe.tf/allow-shared-ip: "hare-192.168.1.26"
+    metallb.universe.tf/allow-shared-ip: "share-192.168.1.26"
 spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.1.26
