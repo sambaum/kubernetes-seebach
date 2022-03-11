@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: syslog-ng
+ labels:
+   app: syslog-ng
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: syslog-ng
+ template:
+   metadata:
+     labels:
+       app: syslog-ng
+   spec:
+    containers:
+       - name: syslog-ng
+         image: linuxserver/syslog-ng:3.30.1
+         imagePullPolicy: Always
+         # ports:
+         #   - containerPort: 6601
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: syslog-ng
+           - mountPath: /var/log
+             name: data
+             subPath: syslog-ng
+         env:
+         - name: PUID
+           value: "0"
+         - name: PGID
+           value: "0"
+         - name: TZ
+           value: "Europe/Zurich"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: local-data-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: syslog-ng-service
+spec:
+  type: NodePort
+  selector:
+    app: syslog-ng
+  ports:
+  - protocol: TCP
+    port: 6601
+    targetPort: 6601
+    nodePort: 30614
+    name: syslog-ng-tcp
+  - protocol: UDP
+    port: 5514
+    targetPort: 5514
+    nodePort: 30514
+    name: syslog-ng-udp
+---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: syslog-ng-ingress
+#   annotations:
+#     nginx.ingress.kubernetes.io/client-max-body-size: 100m
+#     nginx.ingress.kubernetes.io/proxy-body-size: 100m
+# spec:
+#   rules:
+#   - host: syslog-ng.int.sambaum.ch
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: syslog-ng-service
+#             port:
+#               number: 8080
