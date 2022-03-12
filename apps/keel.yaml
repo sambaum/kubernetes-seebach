@@ -50,6 +50,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: keel-ingress
+  annotations:
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Keel.sh
+    flame.pawelmalak/url: http://keel.int.sambaum.ch
+    flame.pawelmalak/icon: download-circle-outline
 spec:
   rules:
   - host: keel.int.sambaum.ch

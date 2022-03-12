@@ -51,6 +51,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mealie-ingress
+  annotations:
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Mealie
+    flame.pawelmalak/url: http://mealie.int.sambaum.ch/
+    flame.pawelmalak/icon: noodles
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   rules:
   - host: mealie.int.sambaum.ch
