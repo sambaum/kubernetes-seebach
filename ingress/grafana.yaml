@@ -6,9 +6,15 @@ metadata:
     # kubernetes.io/ingress.class: public
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Frame-Options: allow";
+    cert-manager.io/cluster-issuer: letsencrypt-production
   name: grafana
   namespace: default
 spec:
+  tls:
+  - hosts:
+    - "grafana.int.sambaum.ch"
+    - "kubus-grafana.int.sambaum.ch"
+    secretName: grafana-tls
   rules:
   - host: grafana.int.sambaum.ch
     http:

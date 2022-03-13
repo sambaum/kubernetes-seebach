@@ -94,9 +94,14 @@ metadata:
   annotations:
     flame.pawelmalak/type: application
     flame.pawelmalak/name: Duplicati-Testing
-    flame.pawelmalak/url: http://duplicati-testing.int.sambaum.ch
+    flame.pawelmalak/url: https://duplicati-testing.int.sambaum.ch
     flame.pawelmalak/icon: backup-restore
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "duplicati-testing.int.sambaum.ch"
+    secretName: duplicati-testing.int-tls
   rules:
   - host: duplicati-testing.int.sambaum.ch
     http:

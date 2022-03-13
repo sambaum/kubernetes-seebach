@@ -73,7 +73,12 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/client-max-body-size: 100m
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "sabnzbd.int.sambaum.ch"
+    secretName: sabnzbd.int-tls
   rules:
   - host: sabnzbd.int.sambaum.ch
     http:

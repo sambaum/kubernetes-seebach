@@ -57,13 +57,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: crontab-ui-ingress
-  # annotations:
-    # cert-manager.io/cluster-issuer: letsencrypt-production
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
-  # tls:
-  # - hosts:
-  #   - "crontab-ui.int.sambaum.ch"
-  #   secretName: crontab-ui-tls
+  tls:
+  - hosts:
+    - "crontab-ui.int.sambaum.ch"
+    secretName: crontab-ui-tls
   rules:
   - host: crontab-ui.int.sambaum.ch
     http:

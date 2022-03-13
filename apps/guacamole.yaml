@@ -58,7 +58,12 @@ metadata:
   name: guacamole-ingress
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "guacamole.int.sambaum.ch"
+    secretName: guacamole-tls
   rules:
   - host: guacamole.int.sambaum.ch
     http:
@@ -77,7 +82,12 @@ metadata:
   name: guacamole-ingress-2
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "guacamole.sambaum.ch"
+    secretName: guacamole-tls
   rules:
   - host: guacamole.sambaum.ch
     http:

@@ -56,7 +56,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: flame-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "flame.int.sambaum.ch"
+    secretName: flame-tls
   rules:
   - host: flame.int.sambaum.ch
     http:

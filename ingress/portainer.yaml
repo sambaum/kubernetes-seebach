@@ -4,9 +4,15 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     kubernetes.io/ingress.class: public
+    cert-manager.io/cluster-issuer: letsencrypt-production
   name: portainer
   namespace: portainer
 spec:
+  tls:
+  - hosts:
+    - "portainer.int.sambaum.ch"
+    - "kubus-portainer.int.sambaum.ch"
+    secretName: portainer-tls
   rules:
   - host: portainer.int.sambaum.ch
     http:

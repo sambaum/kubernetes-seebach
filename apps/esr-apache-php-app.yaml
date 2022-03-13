@@ -54,7 +54,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: esr-apache-php-app-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "esr.int.sambaum.ch"
+    secretName: esr-tls
   rules:
   - host: esr.int.sambaum.ch
     http:

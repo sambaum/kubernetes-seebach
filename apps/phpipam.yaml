@@ -90,7 +90,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: phpipam-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  tls:
+  - hosts:
+    - "phpipam.int.sambaum.ch"
+    secretName: phpipam-tls
   rules:
   - host: phpipam.int.sambaum.ch
     http:
