@@ -82,7 +82,8 @@ spec:
   tls:
   - hosts:
     - "jellyfin.int.sambaum.ch"
-    secretName: jellyfin-int-tls
+    - "jellyfin.sambaum.ch"
+    secretName: jellyfin-tls
   rules:
   - host: jellyfin.int.sambaum.ch
     http:
@@ -94,19 +95,6 @@ spec:
             name: jellyfin-service
             port:
               number: 8096
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: jellyfin-ingress-2
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
-spec:
-  tls:
-  - hosts:
-    - "jellyfin.sambaum.ch"
-    secretName: jellyfin-tls
-  rules:
   - host: jellyfin.sambaum.ch
     http:
       paths:
