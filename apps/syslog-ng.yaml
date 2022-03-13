@@ -49,7 +49,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: syslog-ng-service-tcp
+  name: syslog-ng-service-601-tcp
   annotations:
     metallb.universe.tf/allow-shared-ip: "share-192.168.1.26"
 spec:
@@ -61,12 +61,11 @@ spec:
   - protocol: TCP
     port: 601
     targetPort: 601
-    name: syslog-ng-tcp
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: syslog-ng-service-udp
+  name: syslog-ng-service-514-udp
   annotations:
     metallb.universe.tf/allow-shared-ip: "share-192.168.1.26"
 spec:
@@ -78,9 +77,19 @@ spec:
   - protocol: UDP
     port: 514
     targetPort: 514
-    name: syslog-ng-udp
-
-
-
-
-
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: syslog-ng-service-514-tcp
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "share-192.168.1.26"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.26
+  selector:
+    app: syslog-ng
+  ports:
+  - protocol: TCP
+    port: 514
+    targetPort: 514
