@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    kubernetes.io/ingress.class: public
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Goldilocks
+    flame.pawelmalak/url: https://goldilocks.int.sambaum.ch
+    # flame.pawelmalak/icon: backup-restore
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  name: goldilocks-ingress
+  namespace: goldilocks
+spec:
+  tls:
+  - hosts:
+    - "goldilocks.int.sambaum.ch"
+    secretName: goldilocks-tls
+  rules:
+  - host: goldilocks.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: goldilocks-dashboard
+            port:
+              number: 80
