@@ -5,7 +5,7 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # kubernetes.io/ingress.class: public
     cert-manager.io/cluster-issuer: letsencrypt-production
-  name: dashboard
+  name: dashboard-ingress
   namespace: kube-system
 spec:
   tls:

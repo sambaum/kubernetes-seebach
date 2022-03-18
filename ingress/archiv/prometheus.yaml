@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: public
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Frame-Options: allow";
-  name: prometheus
+  name: prometheus-ingress
   namespace: default
 spec:
   rules:

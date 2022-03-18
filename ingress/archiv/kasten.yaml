@@ -4,7 +4,7 @@ metadata:
   annotations:
     # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     kubernetes.io/ingress.class: public
-  name: kasten
+  name: kasten-ingress
   namespace: kasten-io
 spec:
   rules:
