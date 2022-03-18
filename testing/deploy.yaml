@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: compute
+  name: compute
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: compute
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        run: compute
+    spec:
+      containers:
+      - name: compute
+        image: gcr.io/k8s-staging-e2e-test-images/resource-consumer:1.9
+        resources:
+          limits:
+            cpu: "700m"
+            memory: "1000Mi"
+          requests:
+            cpu: "500m"
+            memory: "250Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: compute
+  name: compute
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: compute
