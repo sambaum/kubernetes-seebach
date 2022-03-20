@@ -7,6 +7,7 @@ parent_path=$(
 cd "$parent_path"
 
 helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+helm repo update
 
 helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
 helm install goldilocks --namespace goldilocks fairwinds-stable/goldilocks --create-namespace
