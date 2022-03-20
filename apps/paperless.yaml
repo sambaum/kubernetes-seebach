@@ -56,7 +56,7 @@ spec:
            value: "linuxserver/mods:papermerge-multilangocr"
          - name: OCRLANG
            value: "deu,eng"
-         - name: PAPERLESS_OCR_LANGUAGE
+         - name: PAPERLESS_OCR_LANGUAGES
            value: "deu+eng"
          - name: PAPERLESS_FILENAME_FORMAT
            value: "{document_type}/{created_year}/{correspondent}-{created}-{tag_list}-{title}-ASN{asn}"
