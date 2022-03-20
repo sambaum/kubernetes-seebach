@@ -639,6 +639,21 @@ alertmanager:
 ##
 grafana:
   enabled: true
+
+  persistence:
+    type: pvc
+    enabled: true
+    storageClassName: openebs-local-hostpath-conf
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    # annotations: {}
+    finalizers:
+      - kubernetes.io/pvc-protection
+    # selectorLabels: {}
+    subPath: "grafana"
+    existingClaim: openebs-local-hostpath-conf-pvc
+
   namespaceOverride: ""
 
   ## ForceDeployDatasources Create datasource configmap even if grafana deployment has been disabled

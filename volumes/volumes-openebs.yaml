@@ -32,18 +32,18 @@ provisioner: openebs.io/local
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 
-# ---
-# kind: PersistentVolumeClaim
-# apiVersion: v1
-# metadata:
-#   name: openebs-local-hostpath-conf-pvc
-# spec:
-#   storageClassName: openebs-local-hostpath-conf
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 50G
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: openebs-local-hostpath-conf-pvc
+spec:
+  storageClassName: openebs-local-hostpath-conf
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50G
 # ---
 # kind: PersistentVolumeClaim
 # apiVersion: v1
