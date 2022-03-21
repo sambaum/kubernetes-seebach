@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: flame
-         image: pawelmalak/flame:2.2.1
+         image: pawelmalak/flame:2.2.2
          imagePullPolicy: Always
          ports:
            - containerPort: 5005
