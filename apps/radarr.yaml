@@ -6,7 +6,7 @@ metadata:
  labels:
    app: radarr
  annotations:
-   keel.sh/policy: "glob:version-*"
+   keel.sh/policy: minor
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
    keel.sh/pollSchedule: "@hourly"
@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: radarr
-         image: linuxserver/radarr:version-4.0.5.5981
+         image: linuxserver/radarr:4.0.5
          imagePullPolicy: Always
          ports:
            - containerPort: 7878

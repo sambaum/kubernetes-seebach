@@ -6,7 +6,7 @@ metadata:
  labels:
    app: jellyfin
  annotations:
-   keel.sh/policy: "glob:version-*"
+   keel.sh/policy: minor
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
    keel.sh/pollSchedule: "@hourly"
@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: jellyfin
-         image: linuxserver/jellyfin:version-10.7.7-1
+         image: linuxserver/jellyfin:10.7.7
          imagePullPolicy: Always
          ports:
            - containerPort: 8096

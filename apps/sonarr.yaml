@@ -6,7 +6,7 @@ metadata:
  labels:
    app: sonarr
  annotations:
-   keel.sh/policy: "glob:version-*"
+   keel.sh/policy: minor
    keel.sh/trigger: poll
    keel.sh/approvals: "1"
    keel.sh/pollSchedule: "@hourly"
@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: sonarr
-         image: linuxserver/sonarr:version-3.0.7.1477
+         image: linuxserver/sonarr:3.0.7
          imagePullPolicy: Always
          ports:
            - containerPort: 8989
