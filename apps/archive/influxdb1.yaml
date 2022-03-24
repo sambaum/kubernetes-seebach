@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: influxdb1
+ labels:
+   app: influxdb1
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: influxdb1
+ template:
+   metadata:
+     labels:
+       app: influxdb1
+   spec:
+    containers:
+       - name: influxdb1
+         image: influxdb:1.8.10
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8086
+         volumeMounts:
+           - mountPath: /etc/influxdb/influxdb.conf
+             name: config
+             # subPath: influxdb1
+           - mountPath: /var/lib/influxdb
+             name: data
+             subPath: influxdb1
+         env:
+         - name: DOCKER_INFLUXDB_INIT_USERNAME
+           value: "root"
+         - name: DOCKER_INFLUXDB_INIT_PASSWORD
+           value: "root"
+         - name: DOCKER_INFLUXDB_INIT_ORG
+           value: "test"
+         - name: DOCKER_INFLUXDB_INIT_BUCKET
+           value: "test"
+         - name: DOCKER_INFLUXDB_INIT_RETENTION
+           value: "1w"
+    volumes:
+      - name: config
+        hostPath:
+          path: /conf/influxdb1/influxdb.conf
+          type: FileOrCreate
+      - name: data
+        persistentVolumeClaim:
+          claimName: local-data-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: influxdb1-service
+spec:
+  selector:
+    app: influxdb1
+  ports:
+  - protocol: TCP
+    port: 8086
+    targetPort: 8086
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: influxdb1-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  tls:
+  - hosts:
+    - "influxdb1.int.sambaum.ch"
+    secretName: influxdb1-tls
+  rules:
+  - host: influxdb1.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: influxdb1-service
+            port:
+              number: 8086
