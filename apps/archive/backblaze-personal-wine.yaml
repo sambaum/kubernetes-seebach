@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: backblaze-personal-wine
+ labels:
+   app: backblaze-personal-wine
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: backblaze-personal-wine
+ template:
+   metadata:
+     labels:
+       app: backblaze-personal-wine
+   spec:
+    containers:
+       - name: backblaze-personal-wine
+         image: tessypowder/backblaze-personal-wine:v1.2
+         ports:
+           - containerPort: 5800
+         volumeMounts:
+           - mountPath: /config
+             name: config
+             subPath: backblaze-personal-wine
+           - mountPath: /drives/drive_d/
+             name: nas-media
+           - mountPath: /mnt/NetworkDrives/sam/
+             name: nas-sam
+           - mountPath: /mnt/NetworkDrives/carol/
+             name: nas-carol
+           - mountPath: /mnt/NetworkDrives/other/
+             name: nas-other
+           - mountPath: /mnt/NetworkDrives/backup/
+             name: nas-backup
+         env:
+         - name: TZ
+           value: "Europe/Zurich"
+         - name: USER_ID
+           value: "0"
+         - name: GROUP_ID
+           value: "0"
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+      - name: nas-media
+        persistentVolumeClaim:
+          claimName: nas-media-pvc
+      - name: nas-sam
+        persistentVolumeClaim:
+          claimName: nas-sam-pvc
+      - name: nas-carol
+        persistentVolumeClaim:
+          claimName: nas-carol-pvc
+      - name: nas-other
+        persistentVolumeClaim:
+          claimName: nas-other-pvc
+      - name: nas-backup
+        persistentVolumeClaim:
+          claimName: nas-backup-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: backblaze-personal-wine-service
+spec:
+  selector:
+    app: backblaze-personal-wine
+  ports:
+  - protocol: TCP
+    port: 5800
+    targetPort: 5800
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backblaze-personal-wine-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  tls:
+  - hosts:
+    - "backblaze-personal-wine.int.sambaum.ch"
+    secretName: backblaze-personal-wine-tls
+  rules:
+  - host: backblaze-personal-wine.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: backblaze-personal-wine-service
+            port:
+              number: 5800
