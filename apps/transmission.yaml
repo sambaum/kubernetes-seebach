@@ -58,7 +58,7 @@ spec:
           claimName: local-conf-pvc
       - name: transmission-incomplete
         persistentVolumeClaim:
-          claimName: local-data-pvc
+          claimName: local-temp-pvc
       - name: transmission-downloads
         persistentVolumeClaim:
           claimName: nas-media-pvc

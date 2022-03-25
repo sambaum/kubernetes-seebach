@@ -49,7 +49,7 @@ spec:
           claimName: local-conf-pvc
       - name: sabnzbd-incomplete
         persistentVolumeClaim:
-          claimName: local-data-pvc
+          claimName: local-temp-pvc
       - name: sabnzbd-downloads
         persistentVolumeClaim:
           claimName: nas-media-pvc

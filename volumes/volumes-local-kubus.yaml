@@ -82,3 +82,42 @@ spec:
           operator: In
           values:
           - kubus
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-temp-pvc
+spec:
+  volumeName: local-temp-pv
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-temp-pv
+spec:
+  claimRef:
+    name: local-temp-pvc
+    namespace: default
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /temp
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kubus

@@ -30,6 +30,9 @@ spec:
            - mountPath: /config
              name: config
              subPath: duplicati
+           - mountPath: /tmp
+             name: temp
+             subPath: duplicati
            - mountPath: /source/sam
              name: nas-sam
            - mountPath: /source/media
@@ -59,6 +62,9 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: local-data-pvc
+      - name: temp
+        persistentVolumeClaim:
+          claimName: local-temp-pvc
       - name: nas-temp
         persistentVolumeClaim:
           claimName: nas-temp-pvc
