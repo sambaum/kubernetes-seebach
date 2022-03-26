@@ -2126,7 +2126,7 @@ prometheus:
     ## Defaults to 30s.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/release-0.44/pkg/prometheus/promcfg.go#L180-L183
     ##
-    scrapeInterval: ""
+    scrapeInterval: "5s"
 
     ## Number of seconds to wait for target to respond before erroring
     ##
@@ -2473,12 +2473,17 @@ prometheus:
     ## The scrape configuration example below will find master nodes, provided they have the name .*mst.*, relabel the
     ## port to 2379 and allow etcd scraping provided it is running on all Kubernetes master nodes
     ##
-    additionalScrapeConfigs: 
+    additionalScrapeConfigs:
     - job_name: opnsense
       static_configs:
       - targets: ['opnsense.int.sambaum.ch:9100']
         labels:
           group: 'Firewall'
+    - job_name: proxmox
+      static_configs:
+      - targets: ['proxmox.int.sambaum.ch:9100']
+        labels:
+          group: 'proxmox'
     # - job_name: kube-etcd
     #   kubernetes_sd_configs:
     #     - role: node
