@@ -34,16 +34,18 @@ spec:
              name: data
              subPath: influxdb
          env:
-         - name: DOCKER_INFLUXDB_INIT_USERNAME
-           value: "root"
-         - name: DOCKER_INFLUXDB_INIT_PASSWORD
-           value: "root"
-         - name: DOCKER_INFLUXDB_INIT_ORG
-           value: "test"
-         - name: DOCKER_INFLUXDB_INIT_BUCKET
-           value: "test"
-         - name: DOCKER_INFLUXDB_INIT_RETENTION
-           value: "1w"
+         # - name: DOCKER_INFLUXDB_INIT_MODE
+         #   value: "setup"
+         # - name: DOCKER_INFLUXDB_INIT_USERNAME
+         #   value: "root"
+         # - name: DOCKER_INFLUXDB_INIT_PASSWORD
+         #   value: "root"
+         # - name: DOCKER_INFLUXDB_INIT_ORG
+         #   value: "sam"
+         # - name: DOCKER_INFLUXDB_INIT_BUCKET
+         #   value: "sambucket"
+         # - name: DOCKER_INFLUXDB_INIT_RETENTION
+         #   value: "1w"
     volumes:
       - name: config
         persistentVolumeClaim:
