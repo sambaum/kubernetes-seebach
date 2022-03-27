@@ -2479,6 +2479,36 @@ prometheus:
       - targets: ['opnsense.int.sambaum.ch:9100']
         labels:
           group: 'Firewall'
+      metric_relabel_configs:
+      - source_labels: [device]
+        action: replace
+        regex: "re0"
+        replacement: "LAN"
+        target_label: "device"
+      - source_labels: [device]
+        action: replace
+        regex: "em0"
+        replacement: "WAN"
+        target_label: "device"
+      - source_labels: [device]
+        action: replace
+        regex: "re2_vlan102"
+        replacement: "Quarantine"
+        target_label: "device"
+      - source_labels: [device]
+        action: replace
+        regex: "ovpnc2"
+        replacement: "ExpressVPNNL"
+        target_label: "device"
+      - source_labels: [device]
+        action: drop
+        regex: "re2"
+      - source_labels: [device]
+        action: drop
+        regex: "lo0"
+      - source_labels: [device]
+        action: drop
+        regex: "pflog0"
     - job_name: proxmox
       static_configs:
       - targets: ['proxmox.int.sambaum.ch:9100']
