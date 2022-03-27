@@ -69,6 +69,10 @@ metadata:
   name: bazarr-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Bazarr
+    flame.pawelmalak/url: https://bazarr.int.sambaum.ch
+    flame.pawelmalak/icon: https://user-images.githubusercontent.com/26902309/41456760-be00043e-7081-11e8-9646-1b724037b4ff.png
 spec:
   tls:
   - hosts:

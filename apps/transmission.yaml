@@ -90,6 +90,10 @@ metadata:
   name: transmission-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Transmission Flood
+    flame.pawelmalak/url: https://transmission.int.sambaum.ch
+    flame.pawelmalak/icon: https://hotio.dev/webhook-avatars/flood.png
 spec:
   tls:
   - hosts:

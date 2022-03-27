@@ -92,6 +92,10 @@ metadata:
   name: crashplan-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Crashplan
+    flame.pawelmalak/url: https://crashplan.int.sambaum.ch
+    flame.pawelmalak/icon: https://cdn.icon-icons.com/icons2/2407/PNG/512/crashplan_icon_146200.png
 spec:
   tls:
   - hosts:

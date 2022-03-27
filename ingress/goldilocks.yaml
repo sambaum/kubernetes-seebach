@@ -8,7 +8,7 @@ metadata:
     flame.pawelmalak/type: application
     flame.pawelmalak/name: Goldilocks
     flame.pawelmalak/url: https://goldilocks.int.sambaum.ch
-    # flame.pawelmalak/icon: backup-restore
+    flame.pawelmalak/icon: scale
     cert-manager.io/cluster-issuer: letsencrypt-production
   name: goldilocks-ingress
   namespace: goldilocks

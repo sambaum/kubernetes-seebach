@@ -60,7 +60,7 @@ metadata:
     flame.pawelmalak/type: application
     flame.pawelmalak/name: Mealie
     flame.pawelmalak/url: https://mealie.int.sambaum.ch/
-    flame.pawelmalak/icon: noodles
+    flame.pawelmalak/icon: https://hay-kot.github.io/mealie/assets/img/favicon.png
     cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
   tls:

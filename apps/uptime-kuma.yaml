@@ -62,6 +62,10 @@ metadata:
   name: uptime-kuma-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Uptime-Kuma
+    flame.pawelmalak/url: https://uptime.int.sambaum.ch
+    flame.pawelmalak/icon: https://opencollective-production.s3.us-west-1.amazonaws.com/af670e80-082d-11ec-9ccd-77fe5bcff8a2.png
 spec:
   tls:
   - hosts:

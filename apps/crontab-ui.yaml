@@ -59,6 +59,10 @@ metadata:
   name: crontab-ui-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Crontab-UI
+    flame.pawelmalak/url: https://crontab-ui.int.sambaum.ch
+    flame.pawelmalak/icon: https://cdn1.iconfinder.com/data/icons/cloud-hosting/32/stopwatch-icon-512.png
 spec:
   tls:
   - hosts:

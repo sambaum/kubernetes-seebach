@@ -56,6 +56,10 @@ metadata:
   name: esr-apache-php-app-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: ESR
+    flame.pawelmalak/url: https://esr.int.sambaum.ch
+    flame.pawelmalak/icon: https://www.phoenixdruck.ch/wp-content/uploads/2017/03/Einzahlungsscheine.png
 spec:
   tls:
   - hosts:

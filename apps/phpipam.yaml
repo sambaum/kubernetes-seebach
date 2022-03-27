@@ -92,6 +92,10 @@ metadata:
   name: phpipam-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: "{php} IPAM"
+    flame.pawelmalak/url: https://phpipam.int.sambaum.ch
+    flame.pawelmalak/icon: https://www.axonius.com/hs-fs/hubfs/Adapter%20Logos/php_ipam_adapter.png?length=600&name=php_ipam_adapter.png
 spec:
   tls:
   - hosts:

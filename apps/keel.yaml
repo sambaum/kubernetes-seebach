@@ -51,11 +51,11 @@ kind: Ingress
 metadata:
   name: keel-ingress
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
     flame.pawelmalak/type: application
     flame.pawelmalak/name: Keel.sh
     flame.pawelmalak/url: https://keel.int.sambaum.ch
-    flame.pawelmalak/icon: download-circle-outline
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/icon: https://keel.sh/img/logo_small.png
 spec:
   tls:
   - hosts:

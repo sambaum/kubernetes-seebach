@@ -74,6 +74,10 @@ metadata:
     nginx.ingress.kubernetes.io/client-max-body-size: 100m
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: SABnzbd
+    flame.pawelmalak/url: https://sabnzbd.int.sambaum.ch
+    flame.pawelmalak/icon: https://developer.asustor.com/uploadIcons/0020_999_1578567856_SABnzbd_256.png
 spec:
   tls:
   - hosts:

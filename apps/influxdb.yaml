@@ -72,6 +72,10 @@ metadata:
   name: influxdb-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Influxdb
+    flame.pawelmalak/url: https://influxdb.int.sambaum.ch
+    flame.pawelmalak/icon: https://assets.zabbix.com/img/brands/influxdb.svg
 spec:
   tls:
   - hosts:

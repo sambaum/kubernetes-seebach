@@ -7,6 +7,10 @@ metadata:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Frame-Options: allow";
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Grafana
+    flame.pawelmalak/url: https://kubus-grafana.int.sambaum.ch
+    flame.pawelmalak/icon: https://user-images.githubusercontent.com/10999/43383564-afa9ea6c-93db-11e8-855b-de8be4f79756.png
   name: grafana-ingress
   namespace: default
 spec:

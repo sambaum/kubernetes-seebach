@@ -5,6 +5,10 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # kubernetes.io/ingress.class: public
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Kubernetes Dashboard
+    flame.pawelmalak/url: https://kubus-dashboard.int.sambaum.ch
+    flame.pawelmalak/icon: https://cdn2.iconfinder.com/data/icons/mixd/512/20_kubernetes-512.png
   name: dashboard-ingress
   namespace: kube-system
 spec:

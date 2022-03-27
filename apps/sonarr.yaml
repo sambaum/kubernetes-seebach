@@ -69,6 +69,10 @@ metadata:
   name: sonarr-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Sonarr
+    flame.pawelmalak/url: https://sonarr.int.sambaum.ch
+    flame.pawelmalak/icon: https://forums-sonarr-tv.s3.dualstack.us-east-1.amazonaws.com/original/2X/e/ef4553fe96f04a298ec502279731579698e96a9b.png
 spec:
   tls:
   - hosts:

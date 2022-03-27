@@ -56,6 +56,10 @@ metadata:
   name: prowlarr-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Prowlarr
+    flame.pawelmalak/url: https://prowlarr.int.sambaum.ch
+    flame.pawelmalak/icon: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/prowlarr-banner.png
 spec:
   tls:
   - hosts:

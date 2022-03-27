@@ -69,6 +69,10 @@ metadata:
   name: radarr-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Radarr
+    flame.pawelmalak/url: https://radarr.int.sambaum.ch
+    flame.pawelmalak/icon: https://fleet.linuxserver.io/images/linuxserver_radarr.png
 spec:
   tls:
   - hosts:

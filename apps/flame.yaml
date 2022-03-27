@@ -58,6 +58,10 @@ metadata:
   name: flame-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Flame
+    flame.pawelmalak/url: https://flame.int.sambaum.ch
+    flame.pawelmalak/icon: https://raw.githubusercontent.com/pawelmalak/unraid-templates/master/templates/icons/flame.png
 spec:
   tls:
   - hosts:
