@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: phpipam
-         image: phpipam/phpipam-www:v1.4.5
+         image: phpipam/phpipam-www:v1.4.6
          imagePullPolicy: Always
          ports:
            - containerPort: 80
