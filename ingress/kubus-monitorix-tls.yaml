@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubus-monitorix-tls
+spec:
+  type: ExternalName
+  externalName: kubus.int.sambaum.ch
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/upstream-vhost: "kubus.int.sambaum.ch"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      sub_filter_once off;
+      sub_filter 'http://kubus.int.sambaum.ch/' '/';
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Monitorix Kubus
+    flame.pawelmalak/url: https://kubus-monitorix-tls.int.sambaum.ch
+    flame.pawelmalak/icon: https://www.monitorix.org/imgs/monitorixlogo.png
+  name: kubus-monitorix-tls-ingress
+spec:
+  tls:
+  - hosts:
+    - "kubus-monitorix-tls.int.sambaum.ch"
+    secretName: kubus-monitorix-tls
+  rules:
+  - host: kubus-monitorix-tls.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: kubus-monitorix-tls
+            port:
+              number: 8081
