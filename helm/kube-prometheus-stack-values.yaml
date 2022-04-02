@@ -2514,6 +2514,29 @@ prometheus:
       - targets: ['proxmox.int.sambaum.ch:9100']
         labels:
           group: 'proxmox'
+    - job_name: diskstation
+      static_configs:
+      - targets: ['nas.int.sambaum.ch:9100']
+        labels:
+          group: 'DiskStation'
+    - job_name: diskstation-snmp
+      static_configs:
+        - targets:
+          - nas.int.sambaum.ch  # SNMP device.
+          labels:
+            Device: '1'
+      metrics_path: /snmp
+      params:
+        # module: [if_mib]
+        module: [synology]
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: nas.int.sambaum.ch:9116  # The SNMP exporter's real hostname:port.
+
     # - job_name: kube-etcd
     #   kubernetes_sd_configs:
     #     - role: node
