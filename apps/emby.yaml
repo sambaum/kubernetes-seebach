@@ -80,6 +80,8 @@ kind: Ingress
 metadata:
   name: emby-ingress
   annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600" # Recommendation for Websockets
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600" # Recommendation for Websockets
     cert-manager.io/cluster-issuer: letsencrypt-production
     flame.pawelmalak/type: application
     flame.pawelmalak/name: Emby
