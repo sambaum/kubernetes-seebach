@@ -18,7 +18,7 @@ metadata:
       sub_filter 'http://kubus.int.sambaum.ch/' '/';
     flame.pawelmalak/type: application
     flame.pawelmalak/name: Monitorix Kubus
-    flame.pawelmalak/url: https://kubus-monitorix-tls.int.sambaum.ch
+    flame.pawelmalak/url: https://kubus-monitorix-tls.int.sambaum.ch/monitorix
     flame.pawelmalak/icon: https://www.monitorix.org/imgs/monitorixlogo.png
   name: kubus-monitorix-tls-ingress
 spec:
