@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: statping
+ labels:
+   app: statping
+ annotations:
+   keel.sh/policy: minor
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: statping
+ template:
+   metadata:
+     labels:
+       app: statping
+   spec:
+    containers:
+       - name: statping
+         image: adamboutcher/statping-ng:v0.90.78
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8080
+         volumeMounts:
+           - mountPath: /app
+             name: config
+             subPath: statping
+         env:
+         - name: DB_CONN
+           value: "sqlite"
+    # initContainers:
+    #    - name: init-statping
+    #      image: busybox:1.34.1
+    #      command: ['sh', '-c', "echo wait 180 seconds && sleep 180"]
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: local-conf-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: statping-service
+spec:
+  selector:
+    app: statping
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: statping-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: statping
+    flame.pawelmalak/url: https://statping.int.sambaum.ch
+    flame.pawelmalak/icon: https://raw.githubusercontent.com/WalkxCode/dashboard-icons/master/png/statping.png
+spec:
+  tls:
+  - hosts:
+    - "statping.int.sambaum.ch"
+    secretName: statping-tls
+  rules:
+  - host: statping.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: statping-service
+            port:
+              number: 8080
