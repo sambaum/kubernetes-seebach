@@ -15,6 +15,10 @@ loki:
       retention_delete_worker_count: 150
     limits_config:
       retention_period: 14d
+      retention_stream:
+      - selector: '{host="OPNsense.int.sambaum.ch"}'
+        priority: 1
+        period: 7d
 
 promtail:
   enabled: true
