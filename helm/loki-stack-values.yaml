@@ -7,9 +7,14 @@ loki:
     accessModes:
       - ReadWriteOnce
     size: 1Gi
-  limits_config:
-    retention_period: 24h
-    # retention_period: 744h
+  config:
+    compactor:
+      compaction_interval: 10m
+      retention_enabled: true
+      retention_delete_delay: 1s
+      retention_delete_worker_count: 150
+    limits_config:
+      retention_period: 14d
 
 promtail:
   enabled: true
