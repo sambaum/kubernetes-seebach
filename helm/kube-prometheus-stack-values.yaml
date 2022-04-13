@@ -819,7 +819,7 @@ grafana:
 ## Component scraping the kube api server
 ##
 kubeApiServer:
-  enabled: true
+  enabled: false
   tlsConfig:
     serverName: kubernetes
     insecureSkipVerify: false
@@ -2528,7 +2528,6 @@ prometheus:
             Device: '1'
       metrics_path: /snmp
       params:
-        # module: [if_mib]
         module: [synology]
       relabel_configs:
         - source_labels: [__address__]
