@@ -738,7 +738,7 @@ grafana:
       # url: http://prometheus-stack-prometheus:9090/
 
       # If not defined, will use prometheus.prometheusSpec.scrapeInterval or its default
-      defaultDatasourceScrapeInterval: 15s
+      # defaultDatasourceScrapeInterval: 15s
 
       ## Annotations for Grafana datasource configmaps
       ##
@@ -2126,7 +2126,7 @@ prometheus:
     ## Defaults to 30s.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/release-0.44/pkg/prometheus/promcfg.go#L180-L183
     ##
-    scrapeInterval: "5s"
+    #scrapeInterval: "10s"
 
     ## Number of seconds to wait for target to respond before erroring
     ##
@@ -2510,6 +2510,7 @@ prometheus:
         action: drop
         regex: "pflog0"
     - job_name: proxmox
+      scrape_interval: 5s
       static_configs:
       - targets: ['proxmox.int.sambaum.ch:9100']
         labels:
