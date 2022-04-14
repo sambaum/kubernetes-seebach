@@ -29,7 +29,7 @@ spec:
              name: config
              subPath: syslog-ng
            - mountPath: /var/log
-             name: data
+             name: temp
              subPath: syslog-ng
          env:
          - name: PUID
@@ -42,9 +42,9 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: local-conf-pvc
-      - name: data
+      - name: temp
         persistentVolumeClaim:
-          claimName: local-data-pvc
+          claimName: local-temp-pvc
 ---
 kind: Service
 apiVersion: v1
