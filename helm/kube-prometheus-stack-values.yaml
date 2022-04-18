@@ -2536,6 +2536,11 @@ prometheus:
           target_label: instance
         - target_label: __address__
           replacement: nas.int.sambaum.ch:9116  # The SNMP exporter's real hostname:port.
+    - job_name: 'uptime'
+      # scrape_interval: 30s
+      scheme: https
+      static_configs:
+        - targets: ['uptime.int.sambaum.ch:443']
 
     # - job_name: kube-etcd
     #   kubernetes_sd_configs:
