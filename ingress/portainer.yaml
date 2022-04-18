@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600" # Recommendation for Websockets
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600" # Recommendation for Websockets
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     kubernetes.io/ingress.class: public
     cert-manager.io/cluster-issuer: letsencrypt-production
