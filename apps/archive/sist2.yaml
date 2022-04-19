@@ -1,0 +1,145 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: sist2
+ labels:
+   app: sist2
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: sist2
+ template:
+   metadata:
+     labels:
+       app: sist2
+   spec:
+    containers:
+       - name: elasticsearch
+         image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+         env:
+         - name: discovery.type
+           value: single-node
+         - name: ES_JAVA_OPTS
+           value: -Xms1G -Xmx2G
+       - name: sist2
+         image: simon987/sist2:2.12.0-x64-linux
+         imagePullPolicy: Always
+         command: ["sist2"]
+         args: ["scan", "/tmp", "./tmp_idx"]
+         ports:
+           - containerPort: 8200
+         # volumeMounts:
+         #   - mountPath: /config
+         #     name: config
+         #     subPath: sist2
+         #   - mountPath: /tmp
+         #     name: temp
+         #     subPath: sist2
+         #   - mountPath: /source/sam
+         #     name: nas-sam
+         #   - mountPath: /source/media
+         #     name: nas-media
+         #   - mountPath: /source/carol
+         #     name: nas-carol
+         #   - mountPath: /source/other
+         #     name: nas-other
+         #   - mountPath: /source/backup
+         #     name: nas-backup
+         #   - mountPath: /source/conf
+         #     name: config
+         # env:
+         # - name: PUID
+         #   value: "0"
+         # - name: PGID
+         #   value: "0"
+         # - name: TZ
+         #   value: "Europe/Zurich"
+         # resources:
+         #   limits:
+         #     cpu: "1.5"
+    # volumes:
+    #   - name: config
+    #     persistentVolumeClaim:
+    #       claimName: local-conf-pvc
+    #   - name: data
+    #     persistentVolumeClaim:
+    #       claimName: local-data-pvc
+    #   - name: temp
+    #     persistentVolumeClaim:
+    #       claimName: local-temp-pvc
+    #   - name: nas-temp
+    #     persistentVolumeClaim:
+    #       claimName: nas-temp-pvc
+    #   - name: nas-sam
+    #     persistentVolumeClaim:
+    #       claimName: nas-sam-pvc
+    #   - name: nas-media
+    #     persistentVolumeClaim:
+    #       claimName: nas-media-pvc
+    #   - name: nas-carol
+    #     persistentVolumeClaim:
+    #       claimName: nas-carol-pvc
+    #   - name: nas-other
+    #     persistentVolumeClaim:
+    #       claimName: nas-other-pvc
+    #   - name: nas-backup
+    #     persistentVolumeClaim:
+    #       claimName: nas-backup-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sist2-service
+spec:
+  selector:
+    app: sist2
+  ports:
+  - protocol: TCP
+    port: 8200
+    targetPort: 8200
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sist2-elastic-service
+spec:
+  selector:
+    app: elasticsearch
+  ports:
+  - protocol: TCP
+    port: 9200
+    targetPort: 9200
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sist2-ingress
+  annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: sist2
+    flame.pawelmalak/url: https://sist2.int.sambaum.ch
+    # flame.pawelmalak/icon: https://www.sist2.com/images/sist2-fb-share-v1.png
+spec:
+  # tls:
+  # - hosts:
+  #   - "sist2.int.sambaum.ch"
+  #   secretName: sist2-tls
+  rules:
+  - host: sist2.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: sist2-service
+            port:
+              number: 8200
