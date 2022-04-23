@@ -1,0 +1,75 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: dashy
+ labels:
+   app: dashy
+ annotations:
+   keel.sh/policy: major
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+   keel.sh/pollSchedule: "@hourly"
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: dashy
+ template:
+   metadata:
+     labels:
+       app: dashy
+   spec:
+    containers:
+       - name: dashy
+         image: lissy93/dashy:2.0.7
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 80
+         volumeMounts:
+           - mountPath: /app/public/conf.yml
+             name: settings
+    volumes:
+      - name: settings
+        hostPath:
+          path: /conf/dashy/conf.yaml
+          type: FileOrCreate
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dashy-service
+spec:
+  selector:
+    app: dashy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dashy-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: dashy
+    flame.pawelmalak/url: https://dashy.int.sambaum.ch
+    flame.pawelmalak/icon: https://dashy.to/img/dashy.png
+spec:
+  tls:
+  - hosts:
+    - "dashy.int.sambaum.ch"
+    secretName: dashy-tls
+  rules:
+  - host: dashy.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: dashy-service
+            port:
+              number: 80
