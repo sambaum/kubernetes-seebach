@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: phpipam
-         image: phpipam/phpipam-www:v1.4.7
+         image: phpipam/phpipam-www:v1.5.0
          imagePullPolicy: Always
          ports:
            - containerPort: 80
@@ -36,7 +36,7 @@ spec:
          - name: IPAM_DATABASE_WEBHOST
            value: "%"
        - name: phpipam-cron
-         image: phpipam/phpipam-cron:v1.4.7
+         image: phpipam/phpipam-cron:v1.5.0
          imagePullPolicy: Always
          env:
          - name: TZ
