@@ -22,7 +22,7 @@ spec:
    spec:
     containers:
        - name: paperless
-         image: linuxserver/paperless-ngx:1.7.0
+         image: linuxserver/paperless-ngx:1.7.1
          imagePullPolicy: Always
          ports:
            - containerPort: 8000
