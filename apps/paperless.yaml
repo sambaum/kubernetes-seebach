@@ -68,6 +68,8 @@ spec:
            value: "02.08.1985,16.12.1979,09.12.2016,19.03.2020"
          - name: PAPERLESS_CONSUMER_RECURSIVE
            value: "true"
+         - name: PAPERLESS_URL
+           value: https://paperless.int.sambaum.ch
     volumes:
       - name: config
         persistentVolumeClaim:
