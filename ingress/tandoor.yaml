@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    kubernetes.io/ingress.class: public
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    flame.pawelmalak/type: application
+    flame.pawelmalak/name: Tandoor
+    flame.pawelmalak/url: https://tandoor.int.sambaum.ch
+    flame.pawelmalak/icon: food
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  name: tandoor-ingress
+  namespace: default
+spec:
+  tls:
+  - hosts:
+    - "tandoor.int.sambaum.ch"
+    secretName: tandoor-tls
+  rules:
+  - host: tandoor.int.sambaum.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: tandoor-recipes
+            port:
+              number: 80
